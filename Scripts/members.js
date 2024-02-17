@@ -128,115 +128,152 @@ async function populateFrontersList() {
   }
 }
 
-async function populateMembersList() {
-  try {
-    const members = await fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
 
-    const memberListContainer = document.getElementById("memberContainer");
+function displayMembers(members) {
+  // Sort members array alphabetically by name
+  members.sort((a, b) => a.name.localeCompare(b.name));
 
-    memberListContainer.innerHTML = "";
+  const memberList = document.getElementById("memberContainer");
+  const frontMemberList = document.getElementById("frontMemberList");
 
-    members.sort((a, b) => a.name.localeCompare(b.name));
+  members.forEach((member) => {
+    // main member list
+    const memberDiv = document.createElement("div");
+    memberDiv.classList.add("member");
+    memberDiv.dataset.memberId = member.id;
 
-    members.forEach((member) => {
-      const memberDiv = document.createElement("div");
-      memberDiv.classList.add("member");
-      memberDiv.dataset.memberId = member.id;
-      
-      const memberSelf = document.createElement("p");
-      memberSelf.textContent = member.id;
-      memberSelf.style.position = "relative";
-      memberSelf.style.textAlign = "left";
-      memberSelf.style.height = 0;
-      memberSelf.style.margin = "2px";
-      memberSelf.style.zIndex = "-8";
-      memberSelf.style.userSelect = "none";
-      
-      const memberImg = document.createElement("img");
-      memberImg.dataset.memberId = member.id;
-      memberImg.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
-      memberImg.alt = member.name + "'s avatar";
-      memberImg.draggable = false;
-      
-      // Create x icon
-      const x = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      x.classList.add("btn");
-      x.style.height = "2em";
-      x.style.width = "2em";
-      x.setAttribute("clip-rule", "evenodd");
-      x.setAttribute("fill-rule", "evenodd");
-      x.setAttribute("stroke-linejoin", "round");
-      x.setAttribute("stroke-miterlimit", "2");
-      x.setAttribute("viewBox", "0 0 24 24");
-      
-      const xPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      xPath.style.opacity = "0.25";
-      xPath.setAttribute("fill", "red");
-      xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");    
-      
-      const memberName = document.createElement("h3");
-      memberName.textContent = member.name;
-      
-      const memberPronouns = document.createElement("h4");
-      memberPronouns.textContent = member.pronouns || "No Pronouns";
-      
-      const memberColor = document.createElement("div");
-      memberColor.classList.add("member-color");
-      memberColor.style.backgroundColor = "#" + (member.color || "00000030"); // Default color black
-      
-      x.appendChild(xPath);
-      memberDiv.appendChild(x);
-      memberDiv.appendChild(memberSelf);
-      memberDiv.appendChild(memberImg);
-      memberDiv.appendChild(memberName);
-      memberDiv.appendChild(memberPronouns);
-      memberDiv.appendChild(memberColor);
-      
-      memberListContainer.appendChild(memberDiv);
+    const memberSelf = document.createElement("p");
+    memberSelf.textContent = member.id;
+    memberSelf.style.position = "relative";
+    memberSelf.style.textAlign = "left";
+    memberSelf.style.height = 0;
+    memberSelf.style.margin = "2px";
+    memberSelf.style.zIndex = "-8";
+    memberSelf.style.userSelect = "none";
 
-      // ---
-      x.addEventListener("mouseover", () => {
-        xPath.style.opacity = "1";
-      });
+    const memberImg = document.createElement("img");
+    memberImg.dataset.memberId = member.id;
+    memberImg.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+    memberImg.alt = member.name + "'s avatar";
+    memberImg.draggable = false;
+
+    const x = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    x.classList.add("btn");
+    x.style.height = "2em";
+    x.style.width = "2em";
+    x.setAttribute("clip-rule", "evenodd");
+    x.setAttribute("fill-rule", "evenodd");
+    x.setAttribute("stroke-linejoin", "round");
+    x.setAttribute("stroke-miterlimit", "2");
+    x.setAttribute("viewBox", "0 0 24 24");
+
+    const xPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    xPath.style.opacity = "0.25";
+    xPath.setAttribute("fill", "red");
+    xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");    
       
-      x.addEventListener("mouseout", () => {
-        xPath.style.opacity = "0.25";
-      });
-  
-      const memberId = member.id;
-  
-      x.addEventListener("dblclick", async () => {
-        try {
-          const response = await fetch(`https://api.pluralkit.me/v2/members/${memberId}`, {
-            method: "DELETE",
-            headers: {
-              "Authorization": TOKEN
-            }
-          });
-        
-          if (!response.ok) {
-            showAlert("Something went wrong, Member not deleted");
-            throw new Error("Failed to delete member");
-          }
-              
-          showAlert("Member deleted successfully");
-          x.parentElement.remove();
-        } catch (error) {
-          console.error("Error deleting member:", error);
-        }
-      });
+
+    const memberName = document.createElement("h3");
+    memberName.textContent = member.name;
+
+    const memberPronouns = document.createElement("h4");
+    memberPronouns.textContent = member.pronouns || "No Pronouns";
+
+    const memberColor = document.createElement("div");
+    memberColor.classList.add("member-color");
+    memberColor.style.backgroundColor = "#" + (member.color || "00000030"); // Default color black
+
+    x.appendChild(xPath);
+    memberDiv.appendChild(x);
+    memberDiv.appendChild(memberSelf);
+    memberDiv.appendChild(memberImg);
+    memberDiv.appendChild(memberName);
+    memberDiv.appendChild(memberPronouns);
+    memberDiv.appendChild(memberColor);
+
+    memberList.appendChild(memberDiv);
+
+    // list in frontMemberList
+    const memberTab = document.createElement("div");
+    memberTab.classList.add("memberTab");
+    memberTab.style.height = "100px";
+    memberTab.style.padding = "0.5em";
+    memberTab.style.background = "rgba(24, 24, 24, 0.301)";
+    memberTab.style.display = "grid";
+    memberTab.style.gridTemplateColumns = "100px 1fr auto";
+
+    const img = document.createElement("img");
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+
+    const infoContainer = document.createElement("div");
+    infoContainer.style.margin = "0 auto";
+    infoContainer.style.display = "flex";
+    infoContainer.style.flexDirection = "column";
+    infoContainer.style.justifyContent = "center";
+
+    const nameHeading = document.createElement("h3");
+    nameHeading.style.margin = "0";
+    nameHeading.textContent = member.name;
+
+    const pronounsHeading = document.createElement("h4");
+    pronounsHeading.style.margin = "0";
+    pronounsHeading.textContent = member.pronouns || "No Pronouns";
+
+    const checkbox = document.createElement("input");
+    checkbox.style.margin = "1em";
+    checkbox.type = "checkbox";
+    checkbox.id = `frontingBool-${member.id}`;
+    checkbox.name = "areTheyFronting";
+
+    memberTab.appendChild(img);
+    infoContainer.appendChild(nameHeading);
+    infoContainer.appendChild(pronounsHeading);
+    memberTab.appendChild(infoContainer);
+    memberTab.appendChild(checkbox);
+
+    frontMemberList.appendChild(memberTab);
+
+    x.addEventListener("mouseover", () => {
+      x.style.opacity = "1";
     });
 
-  } catch (error) {
-    console.error(error);
-    showAlert("Error: Failed to populate members list.");
-  }
-}
+    x.addEventListener("mouseout", () => {
+      x.style.opacity = "0.25";
+    });
 
+    const memberId = member.id;
+
+    x.addEventListener("dblclick", async () => {
+      try {
+        const response = await fetch(`https://api.pluralkit.me/v2/members/${memberId}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": TOKEN // Assuming TOKEN is the authorization token
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete member");
+        }
+
+      
+        
+        showAlert("Member deleted successfully");
+        x.parentElement.remove();
+      } catch (error) {
+        console.error("Error deleting member:", error);
+      }
+    });
+
+
+  });
+}
+window.displayMembers = displayMembers;
 
 
 document.addEventListener('DOMContentLoaded', populateFrontersList);
-document.addEventListener('DOMContentLoaded', populateMembersList);
 
 document.getElementById("checkFronters");
 //   // sort members array alphabetically by name
