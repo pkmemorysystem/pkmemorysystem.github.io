@@ -37,13 +37,25 @@ document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('hamburger').addEventListener('click', toggleSettings);
   document.getElementById('settingsTitle').addEventListener('click', toggleSettings);
 
-  document.getElementById('addToFront').addEventListener('click', showAddToFrontContainer);
+  document.getElementById('addToFront').addEventListener('click', function () {
+    showAddToFrontContainer();
+    hidefrontersContainer();
+    hideMemberCreationContainer();
+  });
   document.getElementById('cancelAddToFront').addEventListener('click', hideAddToFrontContainer);
 
-  document.getElementById('checkFronters').addEventListener('click', showfrontersContainer);
+  document.getElementById('checkFronters').addEventListener('click', function () {
+    showfrontersContainer();
+    hideAddToFrontContainer();
+    hideMemberCreationContainer();
+  });
   document.getElementById('returnFronters').addEventListener('click', hidefrontersContainer);
 
-  document.getElementById('createMember').addEventListener('click', showMemberCreationContainer);
+  document.getElementById('createMember').addEventListener('click', function () {
+    showMemberCreationContainer();
+    hidefrontersContainer();
+    hideAddToFrontContainer();
+  });
   document.getElementById('cancelCreateMember').addEventListener('click', hideMemberCreationContainer);
   
 });

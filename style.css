@@ -338,13 +338,13 @@ button:active, .btn:active {
 }
 #addToFrontContainer {
   z-index: 8;
-  left: calc(50% - (300px / 2));
+  left: calc(50% - (400px / 2));
   top: -100%;
   /* top: calc(50% - (500px / 2)); debug */
 }
 #frontersContainer {
   z-index: 8;
-  left: calc(50% - (300px / 2));
+  left: calc(50% - (400px / 2));
   bottom: -100%;
   /* bottom: calc(50% - (500px / 2)); debug */
 }

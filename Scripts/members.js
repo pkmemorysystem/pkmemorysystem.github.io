@@ -78,9 +78,11 @@ async function populateFrontersList() {
     }
 
     const frontersListContainer = document.getElementById("frontersList");
+    frontersListContainer.style.overflow = "auto";
     frontersListContainer.innerHTML = ""; // clear previous content
 
     fronters.members.forEach((member) => {
+      // Fronters
       const memberTab = document.createElement("div");
       memberTab.classList.add("memberTab");
       memberTab.style.height = "100px";
@@ -109,7 +111,7 @@ async function populateFrontersList() {
     
       const pronounsHeading = document.createElement("h4");
       pronounsHeading.style.margin = "0";
-      pronounsHeading.textContent = member.pronouns || "No Pronouns";
+      pronounsHeading.textContent = member.pronouns || " ";
     
       imgContainer.appendChild(img);
       memberTab.appendChild(imgContainer);
@@ -138,6 +140,7 @@ function displayMembers(members) {
   const frontMemberList = document.getElementById("frontMemberList");
   
   members.forEach((member) => {
+    // Members
     const memberDiv = document.createElement("div");
     memberDiv.classList.add("member");
     memberDiv.dataset.memberId = member.id;
@@ -183,6 +186,7 @@ function displayMembers(members) {
     
     memberList.appendChild(memberDiv);
     
+    // Add To Front
     const memberTab = document.createElement("div");
     memberTab.classList.add("memberTab");
     memberTab.style.height = "100px";
@@ -191,10 +195,14 @@ function displayMembers(members) {
     memberTab.style.display = "grid";
     memberTab.style.gridTemplateColumns = "100px 1fr auto";
     
+    const imageContainer = document.createElement("div");
+    imageContainer.style.width = "100px";
+    imageContainer.style.overflow = "hidden";
+
     const img = document.createElement("img");
     img.style.width = "100%";
-    img.style.height = "100%";
     img.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+    img.style.overflow = "hidden";
     
     const infoContainer = document.createElement("div");
     infoContainer.style.margin = "0 auto";
@@ -216,7 +224,8 @@ function displayMembers(members) {
     checkbox.id = `frontingBool-${member.id}`;
     checkbox.name = "areTheyFronting";
     
-    memberTab.appendChild(img);
+    imageContainer.appendChild(img);
+    memberTab.appendChild(imageContainer);
     infoContainer.appendChild(nameHeading);
     infoContainer.appendChild(pronounsHeading);
     memberTab.appendChild(infoContainer);
