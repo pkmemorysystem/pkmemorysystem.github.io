@@ -1,13 +1,15 @@
 # PK Memory System
 
-PK Memory System is a web application designed to manage and organize members of a system using the PluralKit API. It allows users to create, modify, and manage members of their system, record switches, and keep track of fronters.
-Journal functionality coming soon!
+PK Memory System is a web application designed to manage and organize members of a system using the PluralKit API. It allows users to create, modify, and manage members of their system, record switches, keep track of fronters and use a daily and persistent journaling feature.
+
+Settings coming soon!
 
 ## Features
 
 - **Member Management**: Create, modify, and delete members of the memory system.
 - **Switch Recording**: Record switches to keep track of who is fronting.
 - **Fronters Display**: View and manage fronters currently active in the system.
+- **Journals**: Remember information by writing in a persistent or journal.
 
 ## Usage
 
