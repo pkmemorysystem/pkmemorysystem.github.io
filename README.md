@@ -36,4 +36,4 @@ This project is licensed under the GNU v3.0 license - see the [LICENSE](LICENSE)
 
 ## Contact
 
-Discord 
+Discord @echo_noen#0000
