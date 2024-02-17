@@ -194,6 +194,7 @@ function displayMembers(members) {
     x.classList.add("btn");
     x.style.height = "2em";
     x.style.width = "2em";
+    x.style.opacity = "0.25";
     x.setAttribute("clip-rule", "evenodd");
     x.setAttribute("fill-rule", "evenodd");
     x.setAttribute("stroke-linejoin", "round");
@@ -204,7 +205,7 @@ function displayMembers(members) {
     xPath.style.opacity = "0.25";
     xPath.setAttribute("fill", "red");
     xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");    
-      
+    xPath.style.opacity = "1";
 
     const memberName = document.createElement("h3");
     memberName.textContent = member.name;
@@ -271,7 +272,7 @@ function displayMembers(members) {
     x.addEventListener("mouseover", () => {
       x.style.opacity = "1";
     });
-
+    
     x.addEventListener("mouseout", () => {
       x.style.opacity = "0.25";
     });
@@ -283,7 +284,7 @@ function displayMembers(members) {
         const response = await fetch(`https://api.pluralkit.me/v2/members/${memberId}`, {
           method: "DELETE",
           headers: {
-            "Authorization": TOKEN // Assuming TOKEN is the authorization token
+            "Authorization": TOKEN
           }
         });
 
