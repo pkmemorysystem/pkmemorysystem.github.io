@@ -81,7 +81,7 @@ async function fetchFronters() {
     
     // Is there the members array
     if (!fronters || !Array.isArray(fronters.members) || fronters.members.length === 0) {
-      console.log("invalid or empty response format");
+      console.log("Invalid or empty response format. Probably no one's fronting");
       
     }
     
