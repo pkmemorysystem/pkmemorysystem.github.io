@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   const alertElement = document.getElementById("alert");
 
-  // Function to show an alert message
   window.showAlert = function(message) {
     alertElement.textContent = message;
     alertElement.style.left = '0';
@@ -22,14 +21,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   };
 
   try {
-    // Fetch members and fronters
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
     const members = await window.fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
     const fronters = await window.fetchFronters(window.apiUrl, window.systemRef, window.TOKEN);
 
-    // Display members
     window.displayMembers(members, fronters);
 
   } catch (error) {

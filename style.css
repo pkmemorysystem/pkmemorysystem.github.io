@@ -25,10 +25,10 @@ body {
   transition: left 1s cubic-bezier(.23, 1, 0.32, 1);
 }
 
-button {
+button, .btn {
   appearance: none;
-  background-color: #161616b7;
-  border: 2px solid #1A1A1A;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1.5px dashed white;
   border-radius: 15px;
   box-sizing: border-box;
   color: #FFFFFF;
@@ -52,16 +52,16 @@ button {
   will-change: transform;
 }
 
-button:disabled {
+button:disabled, .btn:disabled {
   pointer-events: none;
 }
 
-button:hover {
+button:hover, .btn:hover {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-button:active {
+button:active, .btn:active {
   box-shadow: none;
   transform: translateY(0);
 }
@@ -178,8 +178,9 @@ button:active {
 
 #mid {
   overflow-y: auto;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #right {
@@ -213,7 +214,7 @@ button:active {
   word-wrap: break-word;
 }
 
-#addToFront, #checkFronters, .txtboxType, #createMember {
+.txtboxType {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 2px 8px;
   font-weight: bolder;
@@ -222,17 +223,24 @@ button:active {
   cursor: pointer;
   user-select: none;
 }
-#cancelAddToFront {
-  user-select: none;
-}
+
 
 .txtboxType {
   cursor: default;
 }
 
-#fronters {
+#fronters, #memberTitle {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  margin: 0.5em;
+}
+#fronters div {
+  display: flex;
+  align-items: center;
+}
+#fronters h3 {
+  margin: 0.5em;
 }
 
 #important {
@@ -243,6 +251,7 @@ button:active {
   border-radius: 10px;
   white-space: nowrap; /* Prevent text from wrapping */
   overflow: hidden; /* Hide overflow */
+  height: 3em;
 }
 
 .scrollingText {

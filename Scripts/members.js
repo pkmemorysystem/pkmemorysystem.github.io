@@ -78,65 +78,66 @@ async function populateFrontersList() {
     }
 
     const frontersListContainer = document.getElementById("frontersList");
-    frontersListContainer.innerHTML = ""; // Clear previous content
+    frontersListContainer.innerHTML = ""; // clear previous content
 
     fronters.members.forEach((member) => {
       const memberTab = document.createElement("div");
-        memberTab.classList.add("memberTab");
-        memberTab.style.height = "100px";
-        memberTab.style.padding = "0.5em";
-        memberTab.style.background = "rgba(24, 24, 24, 0.301)";
-        memberTab.style.display = "grid";
-        memberTab.style.gridTemplateColumns = "100px 1fr";
-
-        const img = document.createElement("img");
-        img.style.width = "100%";
-        img.style.height = "100%";
-        img.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
-
-        const infoContainer = document.createElement("div");
-        infoContainer.style.margin = "0 auto";
-        infoContainer.style.display = "flex";
-        infoContainer.style.flexDirection = "column";
-        infoContainer.style.justifyContent = "center";
-
-        const nameHeading = document.createElement("h3");
-        nameHeading.style.margin = "0";
-        nameHeading.textContent = member.name;
-
-        const pronounsHeading = document.createElement("h4");
-        pronounsHeading.style.margin = "0";
-        pronounsHeading.textContent = member.pronouns || "No Pronouns";
-
-        // Append elements to memberTab
-        memberTab.appendChild(img);
-        infoContainer.appendChild(nameHeading);
-        infoContainer.appendChild(pronounsHeading);
-        memberTab.appendChild(infoContainer);
-
-        // Append memberTab to fronters list container
-        frontersListContainer.appendChild(memberTab);
+      memberTab.classList.add("memberTab");
+      memberTab.style.height = "100px";
+      memberTab.style.padding = "0.5em";
+      memberTab.style.background = "rgba(24, 24, 24, 0.301)";
+      memberTab.style.display = "grid";
+      memberTab.style.gridTemplateColumns = "100px 1fr";
+    
+      const imgContainer = document.createElement("div");
+      imgContainer.style.width = "100px";
+      imgContainer.style.overflow = "hidden";
+    
+      const img = document.createElement("img");
+      img.style.width = "100%";
+      img.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+    
+      const infoContainer = document.createElement("div");
+      infoContainer.style.margin = "0 auto";
+      infoContainer.style.display = "flex";
+      infoContainer.style.flexDirection = "column";
+      infoContainer.style.justifyContent = "center";
+    
+      const nameHeading = document.createElement("h3");
+      nameHeading.style.margin = "0";
+      nameHeading.textContent = member.name;
+    
+      const pronounsHeading = document.createElement("h4");
+      pronounsHeading.style.margin = "0";
+      pronounsHeading.textContent = member.pronouns || "No Pronouns";
+    
+      imgContainer.appendChild(img);
+      memberTab.appendChild(imgContainer);
+      infoContainer.appendChild(nameHeading);
+      infoContainer.appendChild(pronounsHeading);
+      memberTab.appendChild(infoContainer);
+    
+      frontersListContainer.appendChild(memberTab);
     });
+    
   } catch (error) {
     console.error(error);
     showAlert("Error: Failed to populate fronters list.");
   }
 }
 
-// Call populateFrontersList when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', populateFrontersList);
 
 document.getElementById("checkFronters");
 
 function displayMembers(members) {
-  // Sort members array alphabetically by name
+  // sort members array alphabetically by name
   members.sort((a, b) => a.name.localeCompare(b.name));
   
   const memberList = document.getElementById("memberContainer");
   const frontMemberList = document.getElementById("frontMemberList");
   
   members.forEach((member) => {
-    // Create HTML elements for the main member list
     const memberDiv = document.createElement("div");
     memberDiv.classList.add("member");
     memberDiv.dataset.memberId = member.id;
@@ -182,7 +183,6 @@ function displayMembers(members) {
     
     memberList.appendChild(memberDiv);
     
-    // Create HTML elements for the list in frontMemberList
     const memberTab = document.createElement("div");
     memberTab.classList.add("memberTab");
     memberTab.style.height = "100px";
@@ -216,50 +216,40 @@ function displayMembers(members) {
     checkbox.id = `frontingBool-${member.id}`;
     checkbox.name = "areTheyFronting";
     
-    // Append elements to memberTab
     memberTab.appendChild(img);
     infoContainer.appendChild(nameHeading);
     infoContainer.appendChild(pronounsHeading);
     memberTab.appendChild(infoContainer);
     memberTab.appendChild(checkbox);
     
-    // Append memberTab to frontMemberList
     frontMemberList.appendChild(memberTab);
 
     x.addEventListener("mouseover", () => {
       x.style.opacity = "1";
     });
     
-    // Add event listener for mouseout to change opacity back to 0.25
     x.addEventListener("mouseout", () => {
       x.style.opacity = "0.25";
     });
 
-    // Assuming `member` is the object representing the member you want to delete
-    const memberId = member.id; // Replace this with the actual member ID
+    const memberId = member.id;
 
-    // Add event listener for click to delete the member
     x.addEventListener("dblclick", async () => {
       try {
         const response = await fetch(`https://api.pluralkit.me/v2/members/${memberId}`, {
           method: "DELETE",
           headers: {
-            "Authorization": TOKEN // Assuming TOKEN is the authorization token
+            "Authorization": TOKEN
           }
         });
       
         if (!response.ok) {
+          showAlert("Something went wrong, Member not deleted");
           throw new Error("Failed to delete member");
         }
-      
-        // Optionally, you can remove the UI element for the member here
-        // For example:
-        // x.parentElement.remove(); // Remove the parent element of the "x" span
-      
+            
         showAlert("Member deleted successfully");
-        setTimeout(function () {
-          window.location.reload();
-        }, 2000);
+        x.parentElement.remove();
       } catch (error) {
         console.error("Error deleting member:", error);
       }
@@ -272,14 +262,14 @@ window.displayMembers = displayMembers;
 
 document.getElementById('switch').addEventListener('click', async function () {
   try {
-    console.log("Starting switch recording process...");
+    showAlert("Starting switch recording process...");
 
     const checkedMembers = [];
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 
 
 
-    console.log("Identifying selected members...");
+    showAlert("Identifying selected members...");
     checkboxes.forEach(checkbox => {
       const checkboxIdParts = checkbox.id.split('-');
       if (checkboxIdParts.length !== 2) {
@@ -290,16 +280,14 @@ document.getElementById('switch').addEventListener('click', async function () {
       checkedMembers.push(memberId);
     });
 
-    console.log("Selected member IDs:", checkedMembers); // Log the array after all members are added
-
-    console.log("Constructing request body...");
-    const timestamp = new Date().toISOString(); // Get current timestamp
+    showAlert("Constructing request body...");
+    const timestamp = new Date().toISOString(); // get current time
     const requestBody = {
       timestamp: timestamp,
       members: checkedMembers
     };
 
-    console.log("Sending POST request to record switch...");
+    showAlert("Recording switch...");
     const response = await fetch(`${apiUrl}/systems/${systemRef}/switches`, {
       method: 'POST',
       headers: {
@@ -310,6 +298,7 @@ document.getElementById('switch').addEventListener('click', async function () {
     });
 
     if (!response.ok) {
+      showAlert("Error " +  response.status + ". Failed to record switch")
       throw new Error("Failed to record switch. Server responded with status: " + response.status);
     }
 
@@ -318,7 +307,6 @@ document.getElementById('switch').addEventListener('click', async function () {
       window.location.reload();
     }, 2000);
 
-    // Optionally, you can reset the checkboxes after recording the switch
     checkboxes.forEach(checkbox => {
       checkbox.checked = false;
     });
@@ -397,7 +385,7 @@ async function updateAvatar(memberId, imageUrl) {
         Authorization: TOKEN,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ avatar_url: imageUrl }) // Send image URL in request body
+      body: JSON.stringify({ avatar_url: imageUrl })
     });
 
     if (!response.ok) {
@@ -443,16 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
   createMemberForm.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    // Get form data directly from the form element
     const formData = new FormData(memberForm);
 
-    // Extract data from the form data object
     const memberName = formData.get('name');
     const memberColor = formData.get('color');
     const memberPronouns = formData.get('pronouns');
     const memberAvatar = formData.get('avatar');
 
-    // Step 1: Create the member with just the name
+    // Step 1: create the member with just the name
     try {
       const createResponse = await fetch(`${apiUrl}/members`, {
         method: 'POST',
@@ -460,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
           'Authorization': TOKEN,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: memberName }), // Only include the name
+        body: JSON.stringify({ name: memberName }), // only include the name
       });
 
       if (!createResponse.ok) {
@@ -468,9 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const newMember = await createResponse.json();
-      console.log('New member created:', newMember);
+      showAlert('New member created :: ' + newMember.name);
+      console.log('New member created :: ', newMember);
 
-      // Sequentially modify the member with additional information
       await modifyMember(newMember.id, { color: memberColor, pronouns: memberPronouns, avatar: memberAvatar });
     } catch (error) {
       console.error(error);

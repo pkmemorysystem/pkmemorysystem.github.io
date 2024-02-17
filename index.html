@@ -31,7 +31,7 @@
   </div>
 
   <div id="addToFrontContainer">
-    <h1><span id="cancelAddToFront">-</span> Add to Front</h1>
+    <h1><span class="btn" id="cancelAddToFront">-</span> Add to Front</h1>
     <div id="frontMemberList">
 
     </div>
@@ -50,16 +50,16 @@
     <div id="creationScreen">
       <form id="memberForm">
         <label for="memberName">Member Name:</label>
-        <input type="text" id="memberName" name="name" required>
+        <input type="text" id="memberName" name="name" autocomplete="off" required>
         <hr>
         <label for="memberColor">Member Color (HEX format):</label>
-        <input type="text" id="memberColor" name="color" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+        <input type="text" id="memberColor" name="color" autocomplete="off" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
         <hr>
         <label for="memberPronouns">Member Pronouns:</label>
-        <input type="text" id="memberPronouns" name="pronouns">
+        <input type="text" id="memberPronouns" name="pronouns" autocomplete="off">
         <hr>
         <label for="memberAvatar">Member Avatar (URL):</label>
-        <input type="url" id="memberAvatar" name="avatar">
+        <input type="url" id="memberAvatar" name="avatar" autocomplete="off">
         <hr>
         <button type="button" id="createMemberForm">Create Member</button>
       </form>
@@ -71,7 +71,12 @@
     <div id="content">
       <div id="left">
         <div id="members">
-          <h1>Members <span id="createMember">+</span></h1>
+          <div id="memberTitle">
+            <h1>Members</h1>
+            <svg class="btn" id="createMember" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="white" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/>
+            </svg>
+          </div>
           <div id="memberContainer">
 
           </div>
@@ -80,7 +85,17 @@
 
       <div id="rightPart">
         <div id="mid">
-          <h3 id="fronters"><span>Switch :: <span id="addToFront">+</span></span> <span id="checkFronters">Member(s) in front</span></h3>
+          <div id="fronters">
+            <div>
+              <h3>Switch :: </h3> 
+              
+              <svg class="btn" id="addToFront" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                <path fill="white" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/>
+              </svg>
+            </div>
+
+            <button class="btn" id="checkFronters">Member(s) in front</button>
+          </div>
           <div id="important">
             <div id="scrollingText">
               <p>
