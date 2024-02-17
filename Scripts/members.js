@@ -26,6 +26,39 @@ async function fetchMembers(apiUrl, systemRef, TOKEN) {
 }
 window.fetchMembers = fetchMembers;
 
+export async function highlightMentions() {
+  try {
+    const members = await fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
+
+    if (!members || members.length === 0) {
+      console.log("No members available.");
+      return;
+    }
+
+    const memberNameRegex = new RegExp(members.map(member => `@${member.name}`).join('|'), 'gi');
+
+    const txtboxTypes = document.querySelectorAll('.txtboxType');
+
+    txtboxTypes.forEach(txtboxType => {
+      const content = txtboxType.textContent;
+      const newContent = content.replace(memberNameRegex, matchedName => {
+        const member = members.find(member => `@${member.name}` === matchedName);
+        if (member) {
+          return `<span class="outlined" style="background-color: #${member.color}6b;">${matchedName}</span>`;
+        }
+        return matchedName; // Return the original name if no member is found
+      });
+      txtboxType.innerHTML = newContent;
+    });
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+
+
+
 async function fetchFronters() {
   try {
     const response = await fetch(`${window.apiUrl}/systems/${window.systemRef}/fronters`, {

@@ -1,3 +1,5 @@
+import { highlightMentions } from './members.js';
+
 function saveToLocalStorage() {
   const persistentTxtContent = document.getElementById("persistentTxt").innerText;
   localStorage.setItem("persistentContent", persistentTxtContent);
@@ -13,8 +15,12 @@ function updateFromLocalStorage() {
 document.getElementById("persistentTxt").addEventListener("input", () => {
   saveToLocalStorage();
 });
+document.getElementById("persistentTxt").addEventListener("blur", () => {
+  highlightMentions(); 
+});
 
 window.addEventListener("load", () => {
+  highlightMentions(); 
   updateFromLocalStorage();
 });
 
@@ -64,6 +70,7 @@ document.getElementById("dailyTxt").addEventListener("blur", function() {
   const dailyContent = JSON.parse(localStorage.getItem("dailyText"));
   if (dailyContent) {
     document.getElementById("dailyTxt").innerText = `${dailyContent.date} \u2022 ${dailyContent.content}`;
+    highlightMentions(); 
   }
 });
 
