@@ -107,7 +107,6 @@ button:active, .btn:active {
 }
 
 #members h1 {
-
   margin: 0;
   padding: 0.5em;
 }
@@ -235,9 +234,13 @@ button:active, .btn:active {
   align-items: center;
   margin: 0 0.5em 0.5em 0.5em;
 }
-#fronters div {
+#fronters div, .sameLine {
   display: flex;
   align-items: center;
+  user-select: none;
+}
+.sameLine {
+  justify-content: space-around;
 }
 #fronters h3 {
   margin: 0.5em;
@@ -355,11 +358,6 @@ button:active, .btn:active {
   /* left: calc(50% - (500px / 2)); debug */
 }
 
-
-#addToFrontContainer h1 {
-  margin-top: 0;
-  user-select: none;
-}
 
 #cancelAddToFront, #returnFronters, #cancelCreateMember {
   cursor: pointer;
