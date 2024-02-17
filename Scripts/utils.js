@@ -40,7 +40,6 @@ function showMemberCreationContainer() {
   const containerHeight = createMemberContainer.offsetWidth;
   const leftPosition = `calc(50% - (${containerHeight}px / 2))`;
   createMemberContainer.style.left = leftPosition;
-  console.log("click")
 }
 
 function hideMemberCreationContainer() {
