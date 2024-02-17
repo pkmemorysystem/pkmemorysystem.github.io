@@ -24,11 +24,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
-    const members = await window.fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
-    const fronters = await window.fetchFronters(window.apiUrl, window.systemRef, window.TOKEN);
-
-    window.displayMembers(members, fronters);
-
+    
   } catch (error) {
     console.error(error);
     showAlert("Failed to fetch members or fronters. Please try again.");

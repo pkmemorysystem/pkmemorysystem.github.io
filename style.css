@@ -214,18 +214,15 @@ button:active, .btn:active {
 }
 
 .txtboxType {
+  height: 100%;
+  text-align: left;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 2px 8px;
   font-weight: bolder;
   border: 1.5px dashed white;
   border-radius: 10px;
-  cursor: pointer;
   user-select: none;
-}
-
-
-.txtboxType {
-  cursor: default;
+  overflow-y: auto;
 }
 
 #fronters, #memberTitle {
