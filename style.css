@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: rgb(29, 27, 27);
-  background-image: url(breno-machado-in9-n0JwgZ0-unsplash.jpg);
+  background-image: url(bgImg.jpg);
   background-position: center;
   background-size: cover;
   width: 100vw;
@@ -329,9 +329,8 @@ button:active, .btn:active {
   right: -200vw;
   /* right: 0; debug */
   height: calc(100% - 2em);
-  width: 78vw;
-  min-width: 700px;
-  max-width: 875px;
+  width: 100%;
+  max-width: 800px;
 }
 
 #settingsContainer * {

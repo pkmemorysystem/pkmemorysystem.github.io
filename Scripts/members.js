@@ -1,3 +1,5 @@
+import { updateNoPronounPlaceholder } from './settings.js';
+
 async function fetchMembers(apiUrl, systemRef, TOKEN) {
   try {
     const response = await fetch(`${apiUrl}/systems/${systemRef}/members`, {
@@ -57,8 +59,6 @@ export async function highlightMentions() {
 }
 
 
-
-
 async function fetchFronters() {
   try {
     const response = await fetch(`${window.apiUrl}/systems/${window.systemRef}/fronters`, {
@@ -74,9 +74,8 @@ async function fetchFronters() {
     
     const responseData = await response.text();
     if (!responseData.trim()) {
-      // If response is empty, display "No One"
       console.log("No response data");
-      return; // Exit the function
+      return;
     }
     const fronters = JSON.parse(responseData);
     
@@ -161,7 +160,6 @@ async function populateFrontersList() {
   }
 }
 
-
 function displayMembers(members) {
   // Sort members array alphabetically by name
   members.sort((a, b) => a.name.localeCompare(b.name));
@@ -210,8 +208,9 @@ function displayMembers(members) {
     const memberName = document.createElement("h3");
     memberName.textContent = member.name;
 
+    let noPronounPlaceholder = updateNoPronounPlaceholder();
     const memberPronouns = document.createElement("h4");
-    memberPronouns.textContent = member.pronouns || "No Pronouns";
+    memberPronouns.textContent = member.pronouns || `${noPronounPlaceholder}`;
 
     const memberColor = document.createElement("div");
     memberColor.classList.add("member-color");
@@ -455,10 +454,31 @@ document.getElementById('switch').addEventListener('click', async function () {
   }
 });
 
+document.getElementById("memberContainer").addEventListener("contextmenu", function(event) {
+  // Prevent the default context menu from appearing
+  event.preventDefault();
+
+  if (event.target.tagName === "IMG") {
+    // Get the memberId from the dataset
+    const memberId = event.target.dataset.memberId;
+    
+    // Find the corresponding member element
+    const memberElement = document.querySelector(`.member[data-member-id="${memberId}"]`);
+    
+    // Get the member's name from the member element
+    const memberName = memberElement.querySelector("h3").textContent;
+
+    // Print the member's name to the console
+    console.log("Slayer clicked:", memberName);
+  }
+});
+// goofing off
+
 document.getElementById('memberContainer').addEventListener('dblclick', function (event) {
   if (event.target.tagName === 'H3' || event.target.tagName === 'H4') {
     const memberElement = event.target.closest('.member');
     const memberId = memberElement.dataset.memberId;
+    const isPronouns = event.target.tagName === 'H4';
     event.target.contentEditable = true;
     event.target.focus();
 
@@ -466,9 +486,14 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
       if (event.key === 'Enter') {
         event.preventDefault();
         const newValue = event.target.textContent.trim();
-        const attribute = event.target.tagName === 'H3' ? 'name' : 'pronouns';
+        const attribute = isPronouns ? 'pronouns' : 'name';
         if (newValue !== '') {
           await updateAttribute(memberId, attribute, newValue);
+        } else {
+          if (isPronouns) {
+            // If pronouns are empty, remove the pronouns attribute
+            await updateAttribute(memberId, 'pronouns', '');
+          }
         }
       }
     });
@@ -513,6 +538,7 @@ async function updateAttribute(memberId, attribute, newValue) {
     window.location.reload();
   }
 }
+
 
 async function updateAvatar(memberId, imageUrl) {
   try {
