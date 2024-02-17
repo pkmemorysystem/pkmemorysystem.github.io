@@ -189,41 +189,40 @@ button:active, .btn:active {
   text-align: center;
 }
 
-#rightContainer {
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-rows: 8fr 6fr;
-}
+
 
 .txtbox {
   display: grid;
   grid-template-rows: auto 1fr;
 }
 
-#rightContainer h3 {
-  margin-bottom: 0;
-}
-
-#textbox {
-  text-align: left;
-  padding: 0 1em;
-  background-color: rgba(0, 0, 0, 0.5);
-  overflow-x: auto;
-  word-wrap: break-word;
+#rightContainer {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 200px 1fr; /* Adjusted grid-template-rows */
 }
 
 .txtboxType {
-  height: 100%;
+  height: inherit;
   text-align: left;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 2px 8px;
   font-weight: bolder;
   border: 1.5px dashed white;
   border-radius: 10px;
-  user-select: none;
+}
+
+#persistentTxt,
+#dailyTxt {
   overflow-y: auto;
 }
+
+#dailyTxt {
+  height: 355px;
+}
+
+
 
 #fronters, #memberTitle {
   display: flex;
