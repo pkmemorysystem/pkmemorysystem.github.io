@@ -1,0 +1,356 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(29, 27, 27);
+  background-image: url(breno-machado-in9-n0JwgZ0-unsplash.jpg);
+  background-position: center;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  color: rgb(238, 233, 233);
+  overflow-y: hidden;
+
+  box-sizing: border-box;
+}
+
+#alert {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  color: black;
+  background-color: white;
+  padding: 0 1em;
+  left: -100%;
+  transition: left 1s cubic-bezier(.23, 1, 0.32, 1);
+}
+
+button {
+  appearance: none;
+  background-color: #161616b7;
+  border: 2px solid #1A1A1A;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 1em;
+  min-width: 0;
+  outline: none;
+  padding: 8px 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+button:disabled {
+  pointer-events: none;
+}
+
+button:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+#container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#content {
+  width: 78vw;
+  min-width: 700px;
+  max-width: 875px;
+  height: 80vh;
+
+
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1em;
+}
+
+#left,
+#mid,
+#right {
+  background: rgba(22, 22, 22, 0.452);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border: 1.5px solid rgba(216, 216, 216, 0.7);
+
+  padding: 1em;
+  height: inherit;
+}
+
+#members {
+  display: grid;
+  grid-template-rows: auto 1fr; /* Adjusted to allocate remaining space */
+  height: 100%;
+}
+
+#members h1 {
+
+  margin: 0;
+  padding: 0.5em;
+}
+
+#memberContainer {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.member {
+  text-align: center;
+  margin: 0.5em;
+  padding: 0.5em;
+  background-color: rgba(51, 51, 51, 0.5);
+  border-radius: 5px;
+
+}
+
+.member img {
+  width: 100%;
+}
+
+.member h3,
+.member h4 {
+  margin: 0;
+}
+
+.member-color {
+  width: 100%;
+  height: 1em;
+  margin-top: 0.5em;
+  border-radius: 5px;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #ffffff7c #cccccc6e;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 9px;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #cccccc6e;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ffffff7c;
+  border: 3px none #ffffff;
+}
+
+
+/* 
+  ---------------------------------------
+*/
+
+#rightPart {
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+  gap: 1em;
+}
+
+#mid {
+  overflow-y: auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+#right {
+  display: flex; /* I hate display flex btw like just sayin */
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+#rightContainer {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 8fr 6fr;
+}
+
+.txtbox {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+#rightContainer h3 {
+  margin-bottom: 0;
+}
+
+#textbox {
+  text-align: left;
+  padding: 0 1em;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-x: auto;
+  word-wrap: break-word;
+}
+
+#addToFront, #checkFronters, .txtboxType, #createMember {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 8px;
+  font-weight: bolder;
+  border: 1.5px dashed white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.txtboxType {
+  cursor: default;
+}
+
+#fronters {
+  display: flex;
+  justify-content: space-around;
+}
+
+#important {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 8px;
+  font-weight: bolder;
+  border: 1.5px dashed white;
+  border-radius: 10px;
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflow */
+}
+
+.scrollingText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+}
+
+.importantText {
+  margin: 0;
+  font-size: 1em; /* Adjust font size as needed */
+  color: white;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-50%, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+
+/* ------------------ */
+
+#hamburger {
+  margin: 1em;
+  position: fixed;
+  cursor: pointer;
+}
+
+#settingsTitle {
+  cursor: pointer;
+}
+
+#settingsContainer,
+#addToFrontContainer, 
+#frontersContainer, 
+#createMemberContainer {
+  position: fixed;
+  background: rgba(58, 58, 58, 0.507);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(216, 216, 216, 0.7);
+
+  padding: 1em;
+  transition: all .8s cubic-bezier(1, -0.38, .44, 1.25);
+}
+
+#settingsContainer {
+  z-index: 10;
+  right: -200%;
+  /* right: 0; debug */
+  height: calc(100% - 2em);
+  width: 78vw;
+  min-width: 700px;
+  max-width: 875px;
+}
+
+#settingsContainer * {
+  margin: 0;
+  padding: 0;
+}
+
+#addToFrontContainer, 
+#frontersContainer, 
+#createMemberContainer {
+  /* z-index: 8; */
+  width: 400px;
+  height: 500px;
+  /* direction: -100%; */
+  /* cirection: calc(50% - (500px / 2)); debug */
+  
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+#addToFrontContainer {
+  z-index: 8;
+  left: calc(50% - (300px / 2));
+  top: -100%;
+  /* top: calc(50% - (500px / 2)); debug */
+}
+#frontersContainer {
+  z-index: 8;
+  left: calc(50% - (300px / 2));
+  bottom: -100%;
+  /* bottom: calc(50% - (500px / 2)); debug */
+}
+#createMemberContainer {
+  z-index: 8;
+  top: calc(50% - (500px / 2));
+  left: -100%;
+  /* left: calc(50% - (500px / 2)); debug */
+}
+
+
+#addToFrontContainer h1 {
+  margin-top: 0;
+  user-select: none;
+}
+
+#cancelAddToFront, #returnFronters, #cancelCreateMember {
+  cursor: pointer;
+}
+
+#frontMemberList {
+  overflow-y: auto;
+}

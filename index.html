@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="debug.js"></script>
+  <!-- Gonan split the file -->
+  <script src="init.js"></script>
+  <meta name="referrer" content="no-referrer"> <!-- This is for the imgur hehe -->
+</head>
+
+<body>
+
+  <h3 id="alert">This is an alert!</h3>
+
+  <svg id="hamburger" viewBox="0 0 50 50" width="45px" height="45px">
+    <path fill="white"
+      d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z" />
+  </svg>
+
+  <div id="settingsContainer">
+    <h1 id="settingsTitle">Settings</h1>
+    <hr>
+    <br>
+
+    <h2>This is a WIP! Come back later</h2>
+
+  </div>
+
+  <div id="addToFrontContainer">
+    <h1><span id="cancelAddToFront">-</span> Add to Front</h1>
+    <div id="frontMemberList">
+
+    </div>
+    <button id="switch">Record Switch</button>
+  </div>
+
+  <div id="frontersContainer">
+    <h1><span id="returnFronters">-</span> Fronters</h1>
+    <div id="frontersList">
+
+    </div>
+  </div>
+
+  <div id="createMemberContainer">
+    <h1><span id="cancelCreateMember">-</span> Create Member</h1>
+    <div id="creationScreen">
+      <form id="">
+        <label for="memberName">Member Name:</label>
+        <input type="text" id="memberName" name="name" required>
+        <hr>
+        <label for="memberColor">Member Color (HEX format):</label>
+        <input type="text" id="memberColor" name="color" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+        <hr>
+        <label for="memberPronouns">Member Pronouns:</label>
+        <input type="text" id="memberPronouns" name="pronouns">
+        <hr>
+        <label for="memberAvatar">Member Avatar (URL):</label>
+        <input type="url" id="memberAvatar" name="avatar">
+        <hr>
+        <button type="submit" id="finishCreation">Create Member</button>
+      </form>
+    </div>
+  </div>
+  
+
+  <div id="container">
+    <div id="content">
+      <div id="left">
+        <div id="members">
+          <h1>Members <span id="createMember">+</span></h1>
+          <div id="memberContainer">
+
+          </div>
+        </div>
+      </div>
+
+      <div id="rightPart">
+        <div id="mid">
+          <h3 id="fronters"><span>Switch :: <span id="addToFront">+</span></span> <span id="checkFronters">Member(s) in front</span></h3>
+          <div id="important">
+            <div id="scrollingText">
+              <p>
+                <span class="importantText"></span> - 
+                <span class="importantText"></span> - 
+                <span class="importantText"></span> - 
+                <span class="importantText"></span> - 
+                <span class="importantText"></span> - 
+                <span class="importantText"></span> - 
+                <span class="importantText"></span> - 
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div id="right">
+          <div id="rightContainer">
+            <div id="persistent" class="txtbox">
+              <h3>Ayo</h3>
+              <div id="persistentTxt" class="txtboxType">
+
+              </div>
+            </div>
+
+            <div id="" class="txtbox">
+              <h3>Ayo</h3>
+              <div id="dailyTxt" class="txtboxType">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module" src="Scripts/members.js"></script>
+  <script type="module" src="Scripts/utils.js"></script>
+  <!-- <script src="Scripts/settings.js"></script> -->
+  <script type="module" src="Scripts/main.js"></script>
+
+</body>
+
+</html>
