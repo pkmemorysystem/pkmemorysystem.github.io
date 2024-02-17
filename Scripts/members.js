@@ -161,7 +161,7 @@ function displayMembers(members) {
     x.style.color = "red";
     x.style.opacity = "0.25";
     x.style.cursor = "pointer";
-    x.userSelect = "none";
+    x.style.userSelect = "none";
 
     const memberName = document.createElement("h3");
     memberName.textContent = member.name;
@@ -259,7 +259,7 @@ function displayMembers(members) {
         showAlert("Member deleted successfully");
         setTimeout(function () {
           window.location.reload();
-        }, 4000);
+        }, 2000);
       } catch (error) {
         console.error("Error deleting member:", error);
       }
@@ -316,7 +316,7 @@ document.getElementById('switch').addEventListener('click', async function () {
     showAlert("Switch recorded successfully");
     setTimeout(function () {
       window.location.reload();
-    }, 4000);
+    }, 2000);
 
     // Optionally, you can reset the checkboxes after recording the switch
     checkboxes.forEach(checkbox => {
@@ -380,7 +380,7 @@ async function updateAttribute(memberId, attribute, newValue) {
     showAlert("Attribute Updated");
     setTimeout(function () {
       window.location.reload();
-    }, 4000);
+    }, 2000);
 
   } catch (error) {
     console.error(error);
@@ -437,13 +437,20 @@ async function updateColor(memberId, color) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const memberForm = document.getElementById('memberForm');
   const createMemberForm = document.getElementById('createMemberForm');
 
-  createMemberForm.addEventListener('submit', async (e) => {
+  createMemberForm.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(createMemberForm);
+    // Get form data directly from the form element
+    const formData = new FormData(memberForm);
+
+    // Extract data from the form data object
     const memberName = formData.get('name');
+    const memberColor = formData.get('color');
+    const memberPronouns = formData.get('pronouns');
+    const memberAvatar = formData.get('avatar');
 
     // Step 1: Create the member with just the name
     try {
@@ -461,28 +468,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const newMember = await createResponse.json();
-      showAlert('New member created!');
+      console.log('New member created:', newMember);
 
       // Sequentially modify the member with additional information
-      await modifyMember(newMember.id, formData);
+      await modifyMember(newMember.id, { color: memberColor, pronouns: memberPronouns, avatar: memberAvatar });
     } catch (error) {
       console.error(error);
     }
   });
 });
 
+
+
 async function modifyMember(memberId, formData) {
   try {
     // Step 2: Modify the member color
+    const formData = new FormData(memberForm);
     const memberColor = formData.get('color');
-    const sanitizedColor = memberColor.startsWith('#') ? memberColor.substring(1) : memberColor;
+    const sanitizedMemberColor = memberColor.startsWith('#') ? memberColor.substring(1) : memberColor;
     const modifyColorResponse = await fetch(`${apiUrl}/members/${memberId}`, {
       method: 'PATCH',
       headers: {
         'Authorization': TOKEN,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ color: sanitizedColor }),
+      body: JSON.stringify({ color: sanitizedMemberColor }),
     });
 
     if (!modifyColorResponse.ok) {
@@ -523,8 +533,9 @@ async function modifyMember(memberId, formData) {
     showAlert('Member avatar modified');
     setTimeout(function () {
       window.location.reload();
-    }, 4000);
+    }, 2000);
   } catch (error) {
     console.error(error);
   }
 }
+
