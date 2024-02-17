@@ -1,10 +1,8 @@
-// Function to save content to localStorage
 function saveToLocalStorage() {
   const persistentTxtContent = document.getElementById("persistentTxt").innerText;
   localStorage.setItem("persistentContent", persistentTxtContent);
 }
 
-// Function to update content of #persistentTxt from localStorage
 function updateFromLocalStorage() {
   const persistentTxtContent = localStorage.getItem("persistentContent");
   if (persistentTxtContent !== null) {
@@ -12,45 +10,71 @@ function updateFromLocalStorage() {
   }
 }
 
-// Event listener to capture changes in #persistentTxt
 document.getElementById("persistentTxt").addEventListener("input", () => {
   saveToLocalStorage();
 });
 
-// Update #persistentTxt from localStorage when the page loads
 window.addEventListener("load", () => {
   updateFromLocalStorage();
 });
 
 
-// Function to save content to localStorage with date
-function saveDailyToLocalStorage() {
-  const dailyTxtContent = document.getElementById("dailyTxt").innerText;
-  const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-  localStorage.setItem("dailyContent", JSON.stringify({ date: currentDate, content: dailyTxtContent }));
-}
 
-// Function to update content of #dailyTxt from localStorage
-function updateDailyFromLocalStorage() {
-  const dailyTxtData = JSON.parse(localStorage.getItem("dailyContent"));
-  if (dailyTxtData !== null) {
-    const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-    console.log("Current Date:", currentDate);
-    if (dailyTxtData.date === currentDate) {
-      document.getElementById("dailyTxt").innerText = dailyTxtData.content;
-    } else {
-      // Remove the entry from localStorage if it's not for today
-      localStorage.removeItem("dailyContent");
-    }
+// Daily
+function getCurrentDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  let month = now.getMonth() + 1;
+  let day = now.getDate();
+
+  if (month < 10) {
+    month = '0' + month;
+  }
+  if (day < 10) {
+    day = '0' + day;
+  }
+
+  return `${year}-${month}-${day}`;
+}
+console.log(getCurrentDate());
+
+function saveDailyText() {
+  const dailyTxtContent = document.getElementById("dailyTxt").innerText.trim();
+  const currentDate = getCurrentDate();
+  
+  if (dailyTxtContent) {
+    localStorage.setItem("dailyText", JSON.stringify({ content: dailyTxtContent, date: currentDate }));
+  } else {
+    localStorage.removeItem("dailyText");
   }
 }
 
-// Event listener to capture changes in #dailyTxt
-document.getElementById("dailyTxt").addEventListener("input", () => {
-  saveDailyToLocalStorage();
+function loadDailyText() {
+  const dailyContent = JSON.parse(localStorage.getItem("dailyText"));
+  
+  if (dailyContent && dailyContent.date === getCurrentDate()) {
+    document.getElementById("dailyTxt").innerText = `${dailyContent.date} • ${dailyContent.content}`;
+  } else {
+    document.getElementById("dailyTxt").innerText = '';
+    localStorage.removeItem("dailyText");
+  }
+}
+
+document.getElementById("dailyTxt").addEventListener("blur", function() {
+  const dailyContent = JSON.parse(localStorage.getItem("dailyText"));
+  if (dailyContent) {
+    document.getElementById("dailyTxt").innerText = `${dailyContent.date} \u2022 ${dailyContent.content}`;
+  }
 });
 
-// Update #dailyTxt from localStorage when the page loads
-window.addEventListener("load", () => {
-  updateDailyFromLocalStorage();
+
+document.getElementById("dailyTxt").addEventListener("input", saveDailyText);
+
+document.getElementById("dailyTxt").addEventListener("focus", function() {
+  const dailyContent = JSON.parse(localStorage.getItem("dailyText"));
+  if (dailyContent) {
+    document.getElementById("dailyTxt").innerText = dailyContent.content;
+  }
 });
+
+window.addEventListener("load", loadDailyText);
