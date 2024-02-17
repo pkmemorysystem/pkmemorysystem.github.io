@@ -15,7 +15,7 @@ Settings coming soon!
 
 1. Clone the repository to your local machine.
 2. Open `index.html` in a web browser to start using the Memory System.
-   2.1. Alternatively, host the website yourself!
+   Alternatively, host the website yourself!
 
 ## Dependencies
 
@@ -34,3 +34,7 @@ Contributions are welcome! If you'd like to contribute to PK Memory System, plea
 ## License
 
 This project is licensed under the GNU v3.0 license - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+Discord 
