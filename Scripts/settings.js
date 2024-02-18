@@ -18,7 +18,7 @@ export function updateNoPronounPlaceholder() {
 
   // Return placeholder 
   if (pronounsSelection.value === 'space') {
-    return "\u00A0"; // this is supposed to be a space
+    return "\u00A0"; // this is supposed to be a space (cause it still needs to be editable)
   } else {
     return "No Pronouns";
   }
@@ -31,8 +31,7 @@ document.getElementById('pronounsSelection').addEventListener('change', function
 });
 
 
-// Initialize noPronounPlaceholder when the page loads
-let noPronounPlaceholder = updateNoPronounPlaceholder();
+
 
 // ----------------------------------------
 //  
@@ -84,3 +83,32 @@ function handleCustomBackgroundSubmission() {
 handleBackgroundSelectionChange();
 handleCustomBackgroundSubmission();
 updateBackgroundImage(); // Update background image when the page loads
+
+// ----------------------------------------
+//  
+// ----------------------------------------
+
+const checkbox = document.getElementById('doDividerHandling');
+function updateCheckboxLocalStorage() {
+  if (checkbox.checked) {
+    localStorage.setItem('dividerCheckboxChecked', 'true');
+    checkbox.checked = true;
+  } else {
+    localStorage.setItem('dividerCheckboxChecked', 'false');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('dividerCheckboxChecked') === "true") {
+    checkbox.checked = true;
+  } else {
+    checkbox.checked = false;
+  }
+});
+
+document.getElementById('doDividerHandling').addEventListener('change', function() {
+  updateCheckboxLocalStorage();
+  setTimeout(function () {
+    window.location.reload();
+  }, 200);
+});

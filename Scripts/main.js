@@ -1,4 +1,5 @@
 import { toggleSettings, showAddToFrontContainer, hideAddToFrontContainer, showfrontersContainer, hidefrontersContainer, showMemberCreationContainer, hideMemberCreationContainer } from './utils.js';
+import { displayMembers, fetchMembers, fetchFronters } from './members.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   setTimeout(function () {
@@ -25,11 +26,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
 
-    const members = await window.fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
-    const fronters = await window.fetchFronters(window.apiUrl, window.systemRef, window.TOKEN);
+    const members = await fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
+    const fronters = await fetchFronters(window.apiUrl, window.systemRef, window.TOKEN);
 
     // Display members
-    window.displayMembers(members, fronters);
+    displayMembers(members, fronters);
 
   } catch (error) {
     console.error(error);

@@ -27,19 +27,38 @@
     <br>
 
     <h2>How to handle No Pronouns</h2>
+    <p>
+      By default, the members who do not have pronouns set up for them will
+      display "No Pronouns" in that field, but if the "Do not show" option 
+      is selected, there will be a black space instead. <br>
+      It will still take up space (and be rendered as a space) for future
+      editing.
+    </p>
     <select id="pronounsSelection">
       <option value="show">Show "No Pronouns"</option>
       <option value="space">Do not show</option>
     </select>
     <hr>
-
+    <br>
     <h2>Background Image</h2>
     <select id="backgroundSelection">
       <option value="default">Use default image</option>
       <option value="custom">Use custom image</option>
     </select>
     <input id="bgImgSubmission" type="file" accept="image/*">
-
+    <hr>
+    <br>
+    <h2>Divider Handling</h2>
+    <p>
+      A divider is a PluralKit member created to be a divider when switching,
+      and they usually indicate who is co-conscious. With this option, they
+      won't appear in the member list, but will appear in the fronters list
+      and the add to front list. <br>
+      A divider member has their name start and end with 3 backticks (```), 
+      so that when the user looks at the front history with PluralKit, the
+      divider member is clearly visible as a divider.
+    </p>
+    <input id="doDividerHandling" type="checkbox">
 
   </div>
 
