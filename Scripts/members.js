@@ -292,15 +292,11 @@ function createMemberTab(member) {
   memberTab.appendChild(infoContainer);
   memberTab.appendChild(checkbox);
 
-  // Attach event listener to the checkbox
   checkbox.addEventListener('change', function() {
-    // Check if checkbox is checked
     if (this.checked) {
-      // Add member ID to an array when checkbox is checked
       checkedMembers.push(member.id);
       console.log('Member added to switch list:', member.id);
     } else {
-      // Remove member ID from the array when checkbox is unchecked
       const index = checkedMembers.indexOf(member.id);
       if (index !== -1) {
         checkedMembers.splice(index, 1);
