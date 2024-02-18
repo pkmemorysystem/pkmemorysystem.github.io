@@ -26,7 +26,6 @@ export async function fetchMembers(apiUrl, systemRef, TOKEN) {
     return [];
   }
 }
-window.fetchMembers = fetchMembers;
 
 export async function highlightMentions() {
   try {
@@ -98,7 +97,6 @@ export async function fetchFronters() {
     return [];
   }
 }
-window.fetchFronters = fetchFronters;
 
 async function populateFrontersList() {
   try {
