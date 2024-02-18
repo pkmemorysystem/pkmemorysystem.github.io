@@ -158,8 +158,6 @@ async function populateFrontersList() {
   }
 }
 
-let checkedMembers = []; 
-
 export function displayMembers(members) {
   // sort members array alphabetically by name
   members.sort((a, b) => a.name.localeCompare(b.name));
@@ -251,6 +249,8 @@ function createMemberDiv(member) {
   return memberDiv;
 }
 
+
+let checkedMembers = [];
 function createMemberTab(member) {
   // for frontMemberList
   const memberTab = document.createElement("div");
@@ -292,10 +292,27 @@ function createMemberTab(member) {
   memberTab.appendChild(infoContainer);
   memberTab.appendChild(checkbox);
 
+  // Attach event listener to the checkbox
+  checkbox.addEventListener('change', function() {
+    // Check if checkbox is checked
+    if (this.checked) {
+      // Add member ID to an array when checkbox is checked
+      checkedMembers.push(member.id);
+      console.log('Member added to switch list:', member.id);
+    } else {
+      // Remove member ID from the array when checkbox is unchecked
+      const index = checkedMembers.indexOf(member.id);
+      if (index !== -1) {
+        checkedMembers.splice(index, 1);
+        console.log('Member removed from switch list:', member.id);
+      }
+    }
+  });
+
+  frontMemberList.appendChild(memberTab);
+
   return memberTab;
 }
-
-
 
 document.addEventListener('DOMContentLoaded', populateFrontersList);
 
