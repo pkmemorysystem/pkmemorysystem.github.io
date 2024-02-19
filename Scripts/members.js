@@ -1,6 +1,8 @@
 import { updateNoPronounPlaceholder } from './settings.js';
+import { systemRef, apiUrl, TOKEN } from "./init.js";
+import { showAlert } from "./main.js";
 
-export async function fetchMembers(apiUrl, systemRef, TOKEN) {
+async function fetchMembers(apiUrl, systemRef, TOKEN) {
   try {
     const response = await fetch(`${apiUrl}/systems/${systemRef}/members`, {
       headers: {
@@ -26,69 +28,39 @@ export async function fetchMembers(apiUrl, systemRef, TOKEN) {
     return [];
   }
 }
+fetchMembers(apiUrl, systemRef, TOKEN);
+const members = await fetchMembers(apiUrl, systemRef, TOKEN);
 
-export async function highlightMentions() {
+async function fetchFronters() {
   try {
-    const members = await fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
-
-    if (!members || members.length === 0) {
-      console.log("No members available.");
-      return;
-    }
-
-    const memberNameRegex = new RegExp(members.map(member => `@${member.name}`).join('|'), 'gi');
-
-    const txtboxTypes = document.querySelectorAll('.txtboxType');
-
-    txtboxTypes.forEach(txtboxType => {
-      const content = txtboxType.textContent;
-      const newContent = content.replace(memberNameRegex, matchedName => {
-        const member = members.find(member => `@${member.name}` === matchedName);
-        if (member) {
-          return `<span class="outlined" style="background-color: #${member.color}6b;">${matchedName}</span>`;
-        }
-        return matchedName; // Return the original name if no member is found
-      });
-      txtboxType.innerHTML = newContent;
-    });
-
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-
-export async function fetchFronters() {
-  try {
-    const response = await fetch(`${window.apiUrl}/systems/${window.systemRef}/fronters`, {
+    const response = await fetch(`${apiUrl}/systems/${systemRef}/fronters`, {
       headers: {
-        Authorization: window.TOKEN
+        Authorization: TOKEN
       },
     });
-    
+
     if (!response.ok) {
       console.log("No response");
       throw new Error("Failed to fetch fronters");
     }
-    
+
     const responseData = await response.text();
     if (!responseData.trim()) {
       console.log("No response data");
       return;
     }
     const fronters = JSON.parse(responseData);
-    
+
     // Is there the members array
     if (!fronters || !Array.isArray(fronters.members) || fronters.members.length === 0) {
       console.log("Invalid or empty response format. Probably no one's fronting");
-      
     }
-    
+
     // console.log("Fronters:", fronters.members);
-    
+
     // const frontingMember = document.getElementById("frontingMember");
-    
-      // display them names separated by commas
+
+    // display them names separated by commas
     // const frontersNames = fronters.members.map(member => member.name).join(", ");
     // frontingMember.textContent = frontersNames;
     return fronters;
@@ -97,13 +69,13 @@ export async function fetchFronters() {
     return [];
   }
 }
+fetchFronters()
+const fronters = await fetchFronters(apiUrl, systemRef, TOKEN);
 
 async function populateFrontersList() {
   try {
-    const fronters = await fetchFronters(window.apiUrl, window.systemRef, window.TOKEN);
-
     if (!fronters || !Array.isArray(fronters.members) || fronters.members.length === 0) {
-      showAlert("No fronters available.");
+      console.log("No fronters available.");
       return;
     }
 
@@ -120,45 +92,45 @@ async function populateFrontersList() {
       memberTab.style.background = "rgba(24, 24, 24, 0.301)";
       memberTab.style.display = "grid";
       memberTab.style.gridTemplateColumns = "100px 1fr";
-    
+
       const imgContainer = document.createElement("div");
       imgContainer.style.width = "100px";
       imgContainer.style.overflow = "hidden";
-    
+
       const img = document.createElement("img");
       img.style.width = "100%";
       img.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
-    
+
       const infoContainer = document.createElement("div");
       infoContainer.style.margin = "0 auto";
       infoContainer.style.display = "flex";
       infoContainer.style.flexDirection = "column";
       infoContainer.style.justifyContent = "center";
-    
+
       const nameHeading = document.createElement("h3");
       nameHeading.style.margin = "0";
       nameHeading.textContent = member.name;
-    
+
       const pronounsHeading = document.createElement("h4");
       pronounsHeading.style.margin = "0";
       pronounsHeading.textContent = member.pronouns || " ";
-    
+
       imgContainer.appendChild(img);
       memberTab.appendChild(imgContainer);
       infoContainer.appendChild(nameHeading);
       infoContainer.appendChild(pronounsHeading);
       memberTab.appendChild(infoContainer);
-    
+
       frontersListContainer.appendChild(memberTab);
     });
-    
+
   } catch (error) {
     console.error(error);
     showAlert("Error: Failed to populate fronters list.");
   }
 }
 
-export function displayMembers(members) {
+async function displayMembers(members) {
   // sort members array alphabetically by name
   members.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -185,6 +157,7 @@ export function displayMembers(members) {
     // always add member to the front member list
     const memberTab = createMemberTab(member);
     frontMemberList.appendChild(memberTab);
+    populateFrontersList();
   });
 }
 
@@ -194,64 +167,87 @@ function createMemberDiv(member) {
   memberDiv.classList.add("member");
   memberDiv.dataset.memberId = member.id;
 
-   const memberSelf = document.createElement("p");
-   memberSelf.textContent = member.id;
-   memberSelf.style.position = "relative";
-   memberSelf.style.textAlign = "left";
-   memberSelf.style.height = 0;
-   memberSelf.style.margin = "2px";
-   memberSelf.style.zIndex = "-8";
-   memberSelf.style.userSelect = "none";
+  const memberSelf = document.createElement("p");
+  memberSelf.textContent = member.id;
+  memberSelf.style.position = "relative";
+  memberSelf.style.textAlign = "left";
+  memberSelf.style.height = 0;
+  memberSelf.style.margin = "2px";
+  memberSelf.style.zIndex = "-8";
+  memberSelf.style.userSelect = "none";
 
-   const memberImg = document.createElement("img");
-   memberImg.dataset.memberId = member.id;
-   memberImg.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
-   memberImg.alt = member.name + "'s avatar";
-   memberImg.draggable = false;
+  const memberImg = document.createElement("img");
+  memberImg.dataset.memberId = member.id;
+  memberImg.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+  memberImg.alt = member.name + "'s avatar";
+  memberImg.draggable = false;
 
-   const x = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-   x.classList.add("btn");
-   x.style.height = "2em";
-   x.style.width = "2em";
-   x.style.opacity = "0.25";
-   x.setAttribute("clip-rule", "evenodd");
-   x.setAttribute("fill-rule", "evenodd");
-   x.setAttribute("stroke-linejoin", "round");
-   x.setAttribute("stroke-miterlimit", "2");
-   x.setAttribute("viewBox", "0 0 24 24");
+  const x = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  x.classList.add("btn");
+  x.style.height = "2em";
+  x.style.width = "2em";
+  x.style.opacity = "0.25";
+  x.setAttribute("clip-rule", "evenodd");
+  x.setAttribute("fill-rule", "evenodd");
+  x.setAttribute("stroke-linejoin", "round");
+  x.setAttribute("stroke-miterlimit", "2");
+  x.setAttribute("viewBox", "0 0 24 24");
 
-   const xPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-   xPath.style.opacity = "0.25";
-   xPath.setAttribute("fill", "red");
-   xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");    
+  const xPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  xPath.style.opacity = "0.25";
+  xPath.setAttribute("fill", "red");
+  xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");
 
-   const memberName = document.createElement("h3");
-   memberName.textContent = member.name;
+  const memberName = document.createElement("h3");
+  memberName.textContent = member.name;
 
-   let noPronounPlaceholder = updateNoPronounPlaceholder();
-   const memberPronouns = document.createElement("h4");
-   memberPronouns.textContent = member.pronouns || `${noPronounPlaceholder}`;
+  let noPronounPlaceholder = updateNoPronounPlaceholder();
+  const memberPronouns = document.createElement("h4");
+  memberPronouns.textContent = member.pronouns || `${noPronounPlaceholder}`;
 
-   const memberColor = document.createElement("div");
-   memberColor.classList.add("member-color");
-   memberColor.style.backgroundColor = "#" + (member.color || "00000030"); // Default color black
+  const memberColor = document.createElement("div");
+  memberColor.classList.add("member-color");
+  memberColor.style.backgroundColor = "#" + (member.color || "00000030"); // Default color black
 
-   x.appendChild(xPath);
-   memberDiv.appendChild(x);
-   memberDiv.appendChild(memberSelf);
-   memberDiv.appendChild(memberImg);
-   memberDiv.appendChild(memberName);
-   memberDiv.appendChild(memberPronouns);
-   memberDiv.appendChild(memberColor);
+  x.appendChild(xPath);
+  memberDiv.appendChild(x);
+  memberDiv.appendChild(memberSelf);
+  memberDiv.appendChild(memberImg);
+  memberDiv.appendChild(memberName);
+  memberDiv.appendChild(memberPronouns);
+  memberDiv.appendChild(memberColor);
 
-   x.addEventListener("mouseover", () => {
+  x.addEventListener("mouseover", () => {
     xPath.style.opacity = "1";
   });
-  
+
   x.addEventListener("mouseout", () => {
     xPath.style.opacity = "0.25";
   });
 
+  x.addEventListener("dblclick", async (event) => {
+    event.stopPropagation(); // idek why I have to do this
+    const memberDiv = event.target.closest(".member");
+    if (memberDiv) {
+      const memberId = memberDiv.dataset.memberId;
+      try {
+        const response = await fetch(`${apiUrl}/members/${memberId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: TOKEN,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to delete member");
+        }
+        showAlert("Member deleted successfully");
+        memberDiv.remove(); // I'm trying to not have the page reload sm
+      } catch (error) {
+        console.error(error);
+        showAlert("Failed to delete member");
+      }
+    }
+  });
 
   return memberDiv;
 }
@@ -299,7 +295,7 @@ function createMemberTab(member) {
   memberTab.appendChild(infoContainer);
   memberTab.appendChild(checkbox);
 
-  checkbox.addEventListener('change', function() {
+  checkbox.addEventListener('change', function () {
     if (this.checked) {
       checkedMembers.push(member.id);
       console.log('Member added to switch list:', member.id);
@@ -317,100 +313,8 @@ function createMemberTab(member) {
   return memberTab;
 }
 
-document.addEventListener('DOMContentLoaded', populateFrontersList);
+displayMembers(members, fronters);
 
-document.getElementById("checkFronters");
-//   // sort members array alphabetically by name
-//   members.sort((a, b) => a.name.localeCompare(b.name));
-  
-//   const memberList = document.getElementById("memberContainer");
-//   const frontMemberList = document.getElementById("frontMemberList");
-  
-//   members.forEach((member) => {
-//     // Add To Front
-//     const memberTab = document.createElement("div");
-//     memberTab.classList.add("memberTab");
-//     memberTab.style.height = "100px";
-//     memberTab.style.padding = "0.5em";
-//     memberTab.style.background = "rgba(24, 24, 24, 0.301)";
-//     memberTab.style.display = "grid";
-//     memberTab.style.gridTemplateColumns = "100px 1fr auto";
-    
-//     const imageContainer = document.createElement("div");
-//     imageContainer.style.width = "100px";
-//     imageContainer.style.overflow = "hidden";
-
-//     const img = document.createElement("img");
-//     img.style.width = "100%";
-//     img.src = member.avatar_url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
-//     img.style.overflow = "hidden";
-    
-//     const infoContainer = document.createElement("div");
-//     infoContainer.style.margin = "0 auto";
-//     infoContainer.style.display = "flex";
-//     infoContainer.style.flexDirection = "column";
-//     infoContainer.style.justifyContent = "center";
-    
-//     const nameHeading = document.createElement("h3");
-//     nameHeading.style.margin = "0";
-//     nameHeading.textContent = member.name;
-    
-//     const pronounsHeading = document.createElement("h4");
-//     pronounsHeading.style.margin = "0";
-//     pronounsHeading.textContent = member.pronouns || "No Pronouns";
-    
-//     const checkbox = document.createElement("input");
-//     checkbox.style.margin = "1em";
-//     checkbox.type = "checkbox";
-//     checkbox.id = `frontingBool-${member.id}`;
-//     checkbox.name = "areTheyFronting";
-    
-//     imageContainer.appendChild(img);
-//     memberTab.appendChild(imageContainer);
-//     infoContainer.appendChild(nameHeading);
-//     infoContainer.appendChild(pronounsHeading);
-//     memberTab.appendChild(infoContainer);
-//     memberTab.appendChild(checkbox);
-    
-//     frontMemberList.appendChild(memberTab);
-
-//     // x.addEventListener("mouseover", () => {
-//     //   xPath.style.opacity = "1";
-//     // });
-    
-//     // x.addEventListener("mouseout", () => {
-//     //   xPath.style.opacity = "0.25";
-//     // });
-
-//     // const memberId = member.id;
-
-//     // x.addEventListener("dblclick", async () => {
-//     //   try {
-//     //     const response = await fetch(`https://api.pluralkit.me/v2/members/${memberId}`, {
-//     //       method: "DELETE",
-//     //       headers: {
-//     //         "Authorization": TOKEN
-//     //       }
-//     //     });
-      
-//     //     if (!response.ok) {
-//     //       showAlert("Something went wrong, Member not deleted");
-//     //       throw new Error("Failed to delete member");
-//     //     }
-            
-//     //     showAlert("Member deleted successfully");
-//     //     x.parentElement.remove();
-//     //   } catch (error) {
-//     //     console.error("Error deleting member:", error);
-//     //   }
-//     // });
-
-
-//   });
-// }
-// window.displayMembers = displayMembers;
-
-// switching in order - or at least trying
 document.getElementById('switch').addEventListener('click', async function () {
   try {
     const timestamp = new Date().toISOString(); // get current time
@@ -430,7 +334,7 @@ document.getElementById('switch').addEventListener('click', async function () {
     });
 
     if (!response.ok) {
-      showAlert("Error " +  response.status + ". Failed to record switch")
+      showAlert("Error " + response.status + ". Failed to record switch")
       throw new Error("Failed to record switch. Server responded with status: " + response.status);
     }
 
@@ -444,7 +348,7 @@ document.getElementById('switch').addEventListener('click', async function () {
   }
 });
 
-document.getElementById("memberContainer").addEventListener("contextmenu", function(event) {
+document.getElementById("memberContainer").addEventListener("contextmenu", function (event) {
   event.preventDefault();
 
   if (event.target.tagName === "IMG") {
@@ -458,7 +362,7 @@ document.getElementById("memberContainer").addEventListener("contextmenu", funct
     console.log("Slayer clicked:", memberName);
   }
 });
-// Gonna use this later for a memebr card or something
+// Gonna use this later for a memebr card or something (This was horrible I had to scrap 4 hours of work cause I wAs bEinG RAtE LiMITeD for no reason)
 
 document.getElementById('memberContainer').addEventListener('dblclick', function (event) {
   if (event.target.tagName === 'H3' || event.target.tagName === 'H4') {
@@ -477,7 +381,6 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
           await updateAttribute(memberId, attribute, newValue);
         } else {
           if (isPronouns) {
-            // If pronouns are empty, remove the pronouns attribute
             await updateAttribute(memberId, 'pronouns', '');
           }
         }
@@ -573,45 +476,52 @@ async function updateColor(memberId, color) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const memberForm = document.getElementById('memberForm');
-  const createMemberForm = document.getElementById('createMemberForm');
+const memberForm = document.getElementById('memberForm');
+const createMemberForm = document.getElementById('createMemberForm');
 
-  createMemberForm.addEventListener('click', async (e) => {
-    e.preventDefault();
+createMemberForm.addEventListener('click', async (e) => {
+  console.log("Create Member form button clicked");
+  e.preventDefault();
 
-    const formData = new FormData(memberForm);
+  const formData = new FormData(memberForm);
 
-    const memberName = formData.get('name');
-    const memberColor = formData.get('color');
-    const memberPronouns = formData.get('pronouns');
-    const memberAvatar = formData.get('avatar');
+  const memberName = formData.get('name');
+  const memberColor = formData.get('color');
+  const memberPronouns = formData.get('pronouns');
+  const memberAvatar = formData.get('avatar');
 
-    // Step 1: create the member with just the name
-    try {
-      const createResponse = await fetch(`${apiUrl}/members`, {
-        method: 'POST',
-        headers: {
-          'Authorization': TOKEN,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: memberName }), // only include the name
-      });
+  console.log("Member Name:", memberName);
+  console.log("Member Color:", memberColor);
+  console.log("Member Pronouns:", memberPronouns);
+  console.log("Member Avatar:", memberAvatar);
 
-      if (!createResponse.ok) {
-        throw new Error('Failed to create member');
-      }
+  // Step 1: create the member with just the name
+  try {
+    console.log("Attempting to create member...");
+    const createResponse = await fetch(`${apiUrl}/members`, {
+      method: 'POST',
+      headers: {
+        'Authorization': TOKEN,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: memberName }), // only include the name
+    });
 
-      const newMember = await createResponse.json();
-      showAlert('New member created :: ' + newMember.name);
-      console.log('New member created :: ', newMember);
-
-      await modifyMember(newMember.id, { color: memberColor, pronouns: memberPronouns, avatar: memberAvatar });
-    } catch (error) {
-      console.error(error);
+    if (!createResponse.ok) {
+      throw new Error('Failed to create member');
     }
-  });
+
+    const newMember = await createResponse.json();
+    console.log('New member created :: ', newMember);
+    showAlert('New member created :: ' + newMember.name);
+
+    await modifyMember(newMember.id, { color: memberColor, pronouns: memberPronouns, avatar: memberAvatar });
+  } catch (error) {
+    console.error(error);
+  }
 });
+
+
 
 
 
@@ -673,4 +583,4 @@ async function modifyMember(memberId, formData) {
     console.error(error);
   }
 }
-
+// I get why you have to update things one at a time but it would be oh so convenient to do all at once my gods

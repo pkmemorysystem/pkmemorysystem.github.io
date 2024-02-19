@@ -1,3 +1,3 @@
-window.systemRef = "@me";
-window.apiUrl = "https://api.pluralkit.me/v2";
-window.TOKEN = localStorage.getItem('TOKEN');
+export const systemRef = "@me";
+export const apiUrl = "https://api.pluralkit.me/v2";
+export const TOKEN = localStorage.getItem('TOKEN');

@@ -1,36 +1,30 @@
 import { toggleSettings, showAddToFrontContainer, hideAddToFrontContainer, showfrontersContainer, hidefrontersContainer, showMemberCreationContainer, hideMemberCreationContainer } from './utils.js';
-import { displayMembers, fetchMembers, fetchFronters } from './members.js';
+import { TOKEN } from "./init.js";
+const alertElement = document.getElementById("alert");
+
+export function showAlert(message) {
+  alertElement.textContent = message;
+  alertElement.style.left = '0';
+  setTimeout(function () {
+    alertElement.style.left = '-100%';
+  }, 2000);
+};
 
 document.addEventListener('DOMContentLoaded', async function () {
-  setTimeout(function () {
-    if (!TOKEN) {
-      TOKEN = prompt("Please enter your PluralKit API token:");
-      localStorage.setItem('TOKEN', TOKEN);
-        window.location.reload();
-      
+  let TOKENkey;
+
+  if (!localStorage.getItem('TOKEN')) {
+    TOKENkey = prompt("Please enter your PluralKit API token:");
+
+    if (TOKENkey) {
+      localStorage.setItem('TOKEN', TOKENkey);
     }
-  }, 200);
-
-  const alertElement = document.getElementById("alert");
-
-  window.showAlert = function(message) {
-    alertElement.textContent = message;
-    alertElement.style.left = '0';
-    setTimeout(function () {
-      alertElement.style.left = '-100%';
-    }, 2000);
-  };
+  }
 
   try {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
-
-    const members = await fetchMembers(window.apiUrl, window.systemRef, window.TOKEN);
-    const fronters = await fetchFronters(window.apiUrl, window.systemRef, window.TOKEN);
-
-    // Display members
-    displayMembers(members, fronters);
 
   } catch (error) {
     console.error(error);
