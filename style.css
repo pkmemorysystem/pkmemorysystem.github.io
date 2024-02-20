@@ -353,25 +353,30 @@ button:active, .btn:active {
   /* cirection: calc(50% - (500px / 2)); debug */
   
   display: grid;
-  grid-template-rows: auto 2em 1fr auto;
 }
 #addToFrontContainer {
   z-index: 8;
   left: calc(50% - (400px / 2));
   top: -200vh;
   /* top: calc(50% - (500px / 2)); debug */
+  grid-template-rows: auto 2em 1fr auto;
+
 }
 #frontersContainer {
   z-index: 8;
   left: calc(50% - (400px / 2));
   bottom: -200vh;
   /* bottom: calc(50% - (500px / 2)); debug */
+  grid-template-rows: auto 1fr auto;
+
 }
 #createMemberContainer {
   z-index: 8;
   top: calc(50% - (500px / 2));
   left: -200vw;
   /* left: calc(50% - (500px / 2)); debug */
+  grid-template-rows: auto 1fr auto;
+
 }
 
 
