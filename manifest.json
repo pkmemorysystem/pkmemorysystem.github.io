@@ -1,0 +1,19 @@
+{
+  "background_color": "#404040",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "PK Memory System",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Pk;MS",
+  "start_url": "https://pkmemorysystem.github.io/",
+  "theme_color": "#adadad",
+  "id": "pkmsabscol",
+  "description": "App for viewing and modifying your PluralKit system.",
+  "lang": "en",
+  "categories": [
+    "personalization",
+    "productivity",
+    "utilities"
+  ]
+}
