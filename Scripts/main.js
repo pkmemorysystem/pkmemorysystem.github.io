@@ -13,9 +13,12 @@ export function showAlert(message) {
 document.addEventListener('DOMContentLoaded', async function () {
   let TOKENkey;
 
+  // Check if the token is already stored in localStorage
   if (!localStorage.getItem('TOKEN')) {
+    // If not, prompt the user to enter the token
     TOKENkey = prompt("Please enter your PluralKit API token:");
 
+    // Store the token in localStorage
     if (TOKENkey) {
       localStorage.setItem('TOKEN', TOKENkey);
     }

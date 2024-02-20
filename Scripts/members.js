@@ -131,12 +131,48 @@ async function populateFrontersList() {
 }
 
 async function displayMembers(members) {
-  // sort members array alphabetically by name
-  members.sort((a, b) => a.name.localeCompare(b.name));
-
   const memberList = document.getElementById("memberContainer");
   const frontMemberList = document.getElementById("frontMemberList");
 
+  const searchInput = document.getElementById('searchInput');
+  const searchFrontInput = document.getElementById('searchFrontInput'); // Add this line
+
+
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase().trim();
+    const memberList = document.querySelectorAll('.member');
+  
+    memberList.forEach(member => {
+      const memberName = member.querySelector('h3').textContent.toLowerCase();
+    
+      if (memberName.includes(searchTerm)) {
+        member.style.display = 'block'; // Show the member if it matches the search term
+      } else {
+        member.style.display = 'none'; // Hide the member if it doesn't match the search term
+      }
+    });
+  });
+
+  searchFrontInput.addEventListener('input', function() { // Add this function
+    const searchTerm = this.value.toLowerCase().trim();
+    const frontMemberList = document.querySelectorAll('.memberTab');
+
+    frontMemberList.forEach(member => {
+      const memberName = member.querySelector('h3').textContent.toLowerCase();
+
+      if (memberName.includes(searchTerm)) {
+        member.style.display = 'grid'; // Show the member if it matches the search term
+      } else {
+        member.style.display = 'none'; // Hide the member if it doesn't match the search term
+      }
+    });
+  });
+
+  members.sort((a, b) => {
+    const nameA = localStorage.getItem('preferDisplayNamesChecked') === 'true' && a.display_name ? a.display_name.toLowerCase() : a.name.toLowerCase();
+    const nameB = localStorage.getItem('preferDisplayNamesChecked') === 'true' && b.display_name ? b.display_name.toLowerCase() : b.name.toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
   members.forEach((member) => {
     // if (!member.name.startsWith("```") || !member.name.endsWith("```")) {
     //   // Add member to the main member list if it's not a divider member
@@ -153,7 +189,7 @@ async function displayMembers(members) {
       memberList.appendChild(memberDiv);
     }
 
-
+    
     // always add member to the front member list
     const memberTab = createMemberTab(member);
     frontMemberList.appendChild(memberTab);
@@ -165,6 +201,7 @@ function createMemberDiv(member) {
   // Create member div element
   const memberDiv = document.createElement("div");
   memberDiv.classList.add("member");
+  memberDiv.style.touchAction = "manipulation";
   memberDiv.dataset.memberId = member.id;
 
   const memberSelf = document.createElement("p");
@@ -199,7 +236,13 @@ function createMemberDiv(member) {
   xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");
 
   const memberName = document.createElement("h3");
-  memberName.textContent = member.name;
+  // memberName.textContent = localStorage.getItem('preferDisplayNamesChecked') === 'true' ? member.display_name : member.name;
+  if (localStorage.getItem('preferDisplayNamesChecked') === 'true' && member.display_name) {
+    memberName.textContent = member.display_name;
+  } else {
+    memberName.textContent = member.name;
+  }
+
 
   let noPronounPlaceholder = updateNoPronounPlaceholder();
   const memberPronouns = document.createElement("h4");
@@ -226,10 +269,11 @@ function createMemberDiv(member) {
   });
 
   x.addEventListener("dblclick", async (event) => {
-    event.stopPropagation(); // idek why I have to do this
-    const memberDiv = event.target.closest(".member");
+    event.preventDefault();
+    event.stopPropagation(); // Prevent the event from bubbling up to the member element
+    const memberDiv = event.target.closest(".member"); // Find the closest parent member element
     if (memberDiv) {
-      const memberId = memberDiv.dataset.memberId;
+      const memberId = memberDiv.dataset.memberId; // Extract the member ID
       try {
         const response = await fetch(`${apiUrl}/members/${memberId}`, {
           method: "DELETE",
@@ -241,7 +285,7 @@ function createMemberDiv(member) {
           throw new Error("Failed to delete member");
         }
         showAlert("Member deleted successfully");
-        memberDiv.remove(); // I'm trying to not have the page reload sm
+        memberDiv.remove(); // Remove the member element from the DOM
       } catch (error) {
         console.error(error);
         showAlert("Failed to delete member");
@@ -277,7 +321,12 @@ function createMemberTab(member) {
 
   const nameHeading = document.createElement("h3");
   nameHeading.style.margin = "0";
-  nameHeading.textContent = member.name;
+  // nameHeading.textContent = member.name;
+  if (localStorage.getItem('preferDisplayNamesChecked') === 'true' && member.display_name) {
+    nameHeading.textContent = member.display_name;
+  } else {
+    nameHeading.textContent = member.name;
+  }
 
   const pronounsHeading = document.createElement("h4");
   pronounsHeading.style.margin = "0";
@@ -362,7 +411,7 @@ document.getElementById("memberContainer").addEventListener("contextmenu", funct
     console.log("Slayer clicked:", memberName);
   }
 });
-// Gonna use this later for a memebr card or something (This was horrible I had to scrap 4 hours of work cause I wAs bEinG RAtE LiMITeD for no reason)
+// Gonna use this later for a memebr card or something
 
 document.getElementById('memberContainer').addEventListener('dblclick', function (event) {
   if (event.target.tagName === 'H3' || event.target.tagName === 'H4') {
@@ -381,6 +430,7 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
           await updateAttribute(memberId, attribute, newValue);
         } else {
           if (isPronouns) {
+            // If pronouns are empty, remove the pronouns attribute
             await updateAttribute(memberId, 'pronouns', '');
           }
         }
@@ -583,4 +633,4 @@ async function modifyMember(memberId, formData) {
     console.error(error);
   }
 }
-// I get why you have to update things one at a time but it would be oh so convenient to do all at once my gods
+

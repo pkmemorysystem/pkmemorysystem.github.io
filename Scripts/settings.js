@@ -112,3 +112,15 @@ document.getElementById('doDividerHandling').addEventListener('change', function
     window.location.reload();
   }, 200);
 });
+// ----------------------------------------
+//  
+// ----------------------------------------
+
+document.addEventListener('DOMContentLoaded', function() {
+  const preferDisplayNamesCheckbox = document.getElementById('preferDisplayNames');
+  preferDisplayNamesCheckbox.checked = localStorage.getItem('preferDisplayNamesChecked') === 'true';
+
+  preferDisplayNamesCheckbox.addEventListener('change', function() {
+    localStorage.setItem('preferDisplayNamesChecked', this.checked.toString());
+  });
+});

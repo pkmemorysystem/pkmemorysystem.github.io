@@ -118,7 +118,7 @@ button:active, .btn:active {
 
 #members {
   display: grid;
-  grid-template-rows: auto 1fr; /* Adjusted to allocate remaining space */
+  grid-template-rows: auto 2em 1fr; /* Adjusted to allocate remaining space */
   height: 100%;
 }
 
@@ -130,6 +130,11 @@ button:active, .btn:active {
 #memberContainer {
   height: 100%;
   overflow-y: auto;
+}
+
+#memberSearch, #frontMemberSearch {
+  text-align: center;
+  height: 1em;
 }
 
 .member {
@@ -216,7 +221,7 @@ button:active, .btn:active {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 200px 1fr; /* Adjusted grid-template-rows */
+  grid-template-rows: 200px 1fr;
 }
 
 .txtboxType {
@@ -348,7 +353,7 @@ button:active, .btn:active {
   /* cirection: calc(50% - (500px / 2)); debug */
   
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 2em 1fr auto;
 }
 #addToFrontContainer {
   z-index: 8;

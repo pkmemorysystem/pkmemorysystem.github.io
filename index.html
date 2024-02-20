@@ -7,10 +7,8 @@
   <title>Memory System</title>
   <link rel="stylesheet" href="style.css">
   <script src="debug.js"></script>
-  <link rel="manifest" href="manifest.json" />
   <!-- Gonna split the file -->
   <script type="module" src="Scripts/init.js"></script>
-  <script>navigator.serviceWorker.register("service-worker.js")</script> 
   <meta name="referrer" content="no-referrer"> <!-- This is for the imgur hehe -->
 </head>
 
@@ -61,6 +59,13 @@
       divider member is clearly visible as a divider.
     </p>
     <input id="doDividerHandling" type="checkbox">
+    <br>
+    <h2>Prefer Display Names</h2>
+    <p>
+      If this option is enabled, the members will still be in alphabetical
+      order of their member name!
+    </p>
+    <input id="preferDisplayNames" type="checkbox">
 
   </div>
 
@@ -70,6 +75,9 @@
         <path d="m21 11.75c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75z" fill-rule="nonzero"/>
       </svg>
       <h1>Add to Front</h1>
+    </div>
+    <div id="frontMemberSearch">
+      <input type="text" id="searchFrontInput" autocomplete="none" placeholder="Search front members...">
     </div>
     <div id="frontMemberList">
 
@@ -125,6 +133,9 @@
             <svg class="btn" id="createMember" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path fill="white" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/>
             </svg>
+          </div>
+          <div id="memberSearch">
+            <input type="text" id="searchInput" autocomplete="none" placeholder="Search members...">
           </div>
           <div id="memberContainer">
 
