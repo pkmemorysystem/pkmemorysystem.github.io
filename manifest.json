@@ -15,5 +15,20 @@
     "personalization",
     "productivity",
     "utilities"
+  ],
+  "icons":[
+  {
+    "src": "android/apple-icon-180.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "android/manifest-icon-192.maskable.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "maskable"
+  }
   ]
+
 }
