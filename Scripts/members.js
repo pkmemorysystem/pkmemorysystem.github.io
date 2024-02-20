@@ -1,6 +1,7 @@
 import { updateNoPronounPlaceholder } from './settings.js';
 import { systemRef, apiUrl, TOKEN } from "./init.js";
 import { showAlert } from "./main.js";
+import { fetchSystem } from "./system.js";
 
 async function fetchMembers(apiUrl, systemRef, TOKEN) {
   try {
@@ -22,13 +23,14 @@ async function fetchMembers(apiUrl, systemRef, TOKEN) {
     //   const className = `member-${member.id}`;
     //   member.class = className;
     // });
+    console.log(members);
     return members;
   } catch (error) {
     console.error(error);
     return [];
   }
 }
-fetchMembers(apiUrl, systemRef, TOKEN);
+
 const members = await fetchMembers(apiUrl, systemRef, TOKEN);
 
 async function fetchFronters() {
@@ -69,7 +71,6 @@ async function fetchFronters() {
     return [];
   }
 }
-fetchFronters()
 const fronters = await fetchFronters(apiUrl, systemRef, TOKEN);
 
 async function populateFrontersList() {
@@ -130,7 +131,7 @@ async function populateFrontersList() {
   }
 }
 
-async function displayMembers(members) {
+async function displayMembers(members, fronters) {
   const memberList = document.getElementById("memberContainer");
   const frontMemberList = document.getElementById("frontMemberList");
 
@@ -138,13 +139,13 @@ async function displayMembers(members) {
   const searchFrontInput = document.getElementById('searchFrontInput'); // Add this line
 
 
-  searchInput.addEventListener('input', function() {
+  searchInput.addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase().trim();
     const memberList = document.querySelectorAll('.member');
-  
+
     memberList.forEach(member => {
       const memberName = member.querySelector('h3').textContent.toLowerCase();
-    
+
       if (memberName.includes(searchTerm)) {
         member.style.display = 'block'; // Show the member if it matches the search term
       } else {
@@ -153,7 +154,7 @@ async function displayMembers(members) {
     });
   });
 
-  searchFrontInput.addEventListener('input', function() { // Add this function
+  searchFrontInput.addEventListener('input', function () { // Add this function
     const searchTerm = this.value.toLowerCase().trim();
     const frontMemberList = document.querySelectorAll('.memberTab');
 
@@ -189,7 +190,7 @@ async function displayMembers(members) {
       memberList.appendChild(memberDiv);
     }
 
-    
+
     // always add member to the front member list
     const memberTab = createMemberTab(member);
     frontMemberList.appendChild(memberTab);
@@ -397,21 +398,198 @@ document.getElementById('switch').addEventListener('click', async function () {
   }
 });
 
-document.getElementById("memberContainer").addEventListener("contextmenu", function (event) {
+// Function to fetch member data
+async function fetchMember(memberRef) {
+  try {
+    const response = await fetch(`${apiUrl}/members/${memberRef}`, {
+      headers: {
+        Authorization: TOKEN
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch member data");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching member data:", error);
+    return null;
+  }
+}
+
+async function fetchMemberGroups(memberId) {
+  try {
+    const response = await fetch(`${apiUrl}/members/${memberId}/groups`, {
+      headers: {
+        Authorization: TOKEN
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch member groups");
+    }
+
+    const groups = await response.json();
+    return groups;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+document.getElementById("memberContainer").addEventListener("contextmenu", async function (event) {
   event.preventDefault();
 
   if (event.target.tagName === "IMG") {
-    // get the memberId from the dataset
     const memberId = event.target.dataset.memberId;
-    // find corresponding member element
-    const memberElement = document.querySelector(`.member[data-member-id="${memberId}"]`);
-    // get the member's name from the member element
-    const memberName = memberElement.querySelector("h3").textContent;
-    // print the member's name
-    console.log("Slayer clicked:", memberName);
+
+    try {
+      const member = await fetchMember(memberId);
+
+      if (!member) {
+        throw new Error("Member data not found");
+      }
+
+      const system = await fetchSystem(apiUrl, systemRef, TOKEN);
+
+      document.getElementById("memberInfoName").textContent = member.name;
+
+      if (system.tag) {
+        document.getElementById("memberInfoTag").textContent = system.tag;
+      } else {
+        document.getElementById("memberInfoTag").textContent = "";
+      }
+
+      document.getElementById("memberInfoColor").style.backgroundColor = `#${member.color}`;
+
+      if (member.display_name) {
+        document.getElementById("memberInfoDN").innerHTML = member.display_name;
+      } else {
+        document.getElementById("memberInfoDN").parentElement.style.opacity = 0;
+      }
+
+      if (member.avatar_url) {
+        document.getElementById("memberInfoImg").src = member.avatar_url;
+      } else {
+        document.getElementById("memberInfoImg").src = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
+      }
+
+      const memberDescription = member.description.replace(/\n/g, "<br>");
+
+      document.getElementById("memberInfoDesc").innerHTML = memberDescription;
+      document.getElementById("memberInfoDesc").setAttribute("data-member-id", memberId);
+
+      const memberInfoPronouns = document.getElementById("memberInfoPronouns");
+
+      if (member.pronouns) {
+        memberInfoPronouns.textContent = member.pronouns;
+      } else {
+        memberInfoPronouns.textContent = "No Pronouns Set";
+      }
+
+      memberInfoPronouns.setAttribute("data-member-id", memberId);
+      let originalPronouns;
+
+      function handlePronounsEdit(event) {
+        memberInfoPronouns.contentEditable = "true";
+        originalPronouns = memberInfoPronouns.textContent;
+        memberInfoPronouns.focus();
+
+        memberInfoPronouns.addEventListener("keydown", handleKeyDown);
+      }
+
+      function handleKeyDown(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+
+          const newPronouns = memberInfoPronouns.textContent.trim();
+
+          if (newPronouns !== originalPronouns) {
+            updateAttribute(memberId, "pronouns", newPronouns);
+          }
+
+          memberInfoPronouns.contentEditable = "false";
+          memberInfoPronouns.removeEventListener("keydown", handleKeyDown);
+        }
+      }
+
+      memberInfoPronouns.addEventListener("dblclick", handlePronounsEdit);
+
+      const memberInfoBday = document.getElementById("memberInfoBday");
+      if (member.birthday) {
+        memberInfoBday.textContent = member.birthday;
+      } else {
+        memberInfoBday.textContent = "No Birthday Set";
+      }
+      memberInfoBday.setAttribute("data-member-id", memberId);
+      let originalBday;
+
+      function handleDoubleClick(event) {
+        originalBday = memberInfoBday.textContent;
+        memberInfoBday.innerHTML = `<input type="date" value="${originalBday}">`;
+
+        const inputField = memberInfoBday.querySelector("input");
+        inputField.focus();
+
+        inputField.addEventListener("blur", handleBlur);
+      }
+
+      function handleBlur(event) {
+        const inputField = event.target;
+        const newBday = inputField.value;
+
+        if (newBday !== originalBday) {
+          memberInfoBday.textContent = newBday;
+          updateAttribute(memberId, "birthday", newBday);
+        } else {
+          memberInfoBday.textContent = originalBday;
+        }
+
+        inputField.remove();
+        inputField.removeEventListener("blur", handleBlur);
+      }
+
+      memberInfoBday.addEventListener("dblclick", handleDoubleClick);
+
+
+      document.getElementById("memberInfoBanner").style.backgroundImage = `url('${member.banner}')`;
+
+      document.getElementById("memberInfo").style.top = `calc(50% - (700px / 2))`;
+
+      const memberGroups = await fetchMemberGroups(memberId);
+
+      const memberGroupsElement = document.getElementById("memberInfoGroups");
+      if (memberGroups.length === 0) {
+        memberGroupsElement.textContent = "No Groups";
+      } else {
+        const groupNames = memberGroups.map(group => group.name);
+        memberGroupsElement.textContent = groupNames.join(", ");
+      }
+
+      document.getElementById("memberInfoDesc").addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && event.shiftKey) {
+          return;
+        }
+        console.log("Now content :: ", this.innerHTML)
+        if (event.key === "Enter") {
+          event.preventDefault();
+          const memberId = this.dataset.memberId;
+          const newValue = this.innerHTML.replace(/<br>/g, "\n");
+          console.log(newValue);
+          updateAttribute(memberId, 'description', newValue);
+        }
+      });
+
+
+    } catch (error) {
+      console.error("Error updating member info:", error);
+    }
   }
+
 });
-// Gonna use this later for a memebr card or something
+
+
 
 document.getElementById('memberContainer').addEventListener('dblclick', function (event) {
   if (event.target.tagName === 'H3' || event.target.tagName === 'H4') {
@@ -430,7 +608,6 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
           await updateAttribute(memberId, attribute, newValue);
         } else {
           if (isPronouns) {
-            // If pronouns are empty, remove the pronouns attribute
             await updateAttribute(memberId, 'pronouns', '');
           }
         }
@@ -440,13 +617,13 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
     const memberId = event.target.dataset.memberId;
     const imageUrl = prompt("Please enter the URL of the image you want to use as the avatar:");
     if (imageUrl) {
-      updateAvatar(memberId, imageUrl);
+      updateAttribute(memberId, avatar_url, imageUrl);
     }
   } else if (event.target.classList.contains('member-color')) {
     const memberId = event.target.closest('.member').dataset.memberId;
-    const color = prompt("Please select a color:");
+    const colorNew = prompt("Please select a color:");
     if (color) {
-      updateColor(memberId, color);
+      updateAttribute(memberId, color, colornew);
     }
   }
 });
@@ -475,54 +652,6 @@ async function updateAttribute(memberId, attribute, newValue) {
     console.error(error);
     showAlert(`Failed to update member ${attribute}. Please try again.`);
     window.location.reload();
-  }
-}
-
-
-async function updateAvatar(memberId, imageUrl) {
-  try {
-    const response = await fetch(`${apiUrl}/members/${memberId}`, {
-      method: 'PATCH',
-      headers: {
-        Authorization: TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ avatar_url: imageUrl })
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to update avatar");
-    }
-
-    console.log("Avatar updated successfully");
-    if (imageUrl) {
-      window.location.reload();
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function updateColor(memberId, color) {
-  try {
-    const sanitizedColor = color.startsWith('#') ? color.substring(1) : color;
-    const response = await fetch(`${apiUrl}/members/${memberId}`, {
-      method: 'PATCH',
-      headers: {
-        Authorization: TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ color: sanitizedColor })
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to update color");
-    }
-
-    console.log("Color updated successfully");
-    window.location.reload();
-  } catch (error) {
-    console.error(error);
   }
 }
 
@@ -570,9 +699,6 @@ createMemberForm.addEventListener('click', async (e) => {
     console.error(error);
   }
 });
-
-
-
 
 
 async function modifyMember(memberId, formData) {
@@ -633,4 +759,3 @@ async function modifyMember(memberId, formData) {
     console.error(error);
   }
 }
-

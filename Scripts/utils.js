@@ -1,4 +1,4 @@
-function toggleSettings() {
+export function toggleSettings() {
   const settingsContainer = document.getElementById('settingsContainer');
     const currentRight = parseInt(getComputedStyle(settingsContainer).right);
 
@@ -9,42 +9,47 @@ function toggleSettings() {
     }
 }
 
-function showAddToFrontContainer() {
+export function showAddToFrontContainer() {
   const addToFrontContainer = document.getElementById('addToFrontContainer');
   const containerHeight = addToFrontContainer.offsetHeight;
   const topPosition = `calc(50% - (${containerHeight}px / 2))`;
   addToFrontContainer.style.top = topPosition;
 }
 
-function hideAddToFrontContainer() {
+export function hideAddToFrontContainer() {
   const addToFrontContainer = document.getElementById('addToFrontContainer');
   addToFrontContainer.style.top = "-100vh"; // Move the container off-screen to hide it
 }
 
 
-function showfrontersContainer() {
+export function showfrontersContainer() {
   const frontersContainer = document.getElementById('frontersContainer');
   const containerHeight = frontersContainer.offsetHeight;
   const bottomPosition = `calc(50% - (${containerHeight}px / 2))`;
   frontersContainer.style.bottom = bottomPosition;
 }
 
-function hidefrontersContainer() {
+export function hidefrontersContainer() {
   const frontersContainer = document.getElementById('frontersContainer');
   frontersContainer.style.bottom = "-100vh"; // Move the container off-screen to hide it
 }
 
 
-function showMemberCreationContainer() {
+export function showMemberCreationContainer() {
   const createMemberContainer = document.getElementById('createMemberContainer');
   const containerHeight = createMemberContainer.offsetWidth;
   const leftPosition = `calc(50% - (${containerHeight}px / 2))`;
   createMemberContainer.style.left = leftPosition;
 }
 
-function hideMemberCreationContainer() {
+export function hideMemberCreationContainer() {
   const createMemberContainer = document.getElementById('createMemberContainer');
   createMemberContainer.style.left = "-100vw"; // Move the container off-screen to hide it
+}
+
+export function hideMemberInfo() {
+  const memberInfo = document.getElementById('memberInfo');
+  memberInfo.style.top = "-100vh"
 }
 
 
@@ -80,9 +85,3 @@ window.addEventListener('DOMContentLoaded', async () => {
     console.error(error);
   }
 });
-
-
-
-
-
-export { toggleSettings, showAddToFrontContainer, hideAddToFrontContainer, showfrontersContainer, hidefrontersContainer, showMemberCreationContainer, hideMemberCreationContainer }

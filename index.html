@@ -122,6 +122,41 @@
       </form>
     </div>
   </div>
+
+  <div id="memberInfo">
+    <div class="sameLine">
+      <svg id="returnMember" style="width: 2em; height: 2em" class="btn" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m21 11.75c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75z" fill-rule="nonzero"/>
+      </svg>
+      <h1 class="noMrgn" id="memberInfoName">Name</h1><h1 id="memberInfoTag">Tag</h1><div id="memberInfoColor"></div>
+    </div>
+
+    <h4 class="noMrgn">Also Known As :: <span id="memberInfoDN">Display Name</span></h4>
+
+    <div id="memberInfoContent">
+      <img id="memberInfoImg" src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg">
+      <div id="memberInfoDesc" contenteditable="true">
+        This is the member's description
+        <!-- When you unfocus/blur it should update -->
+      </div>
+    </div>
+
+    <div id="memberInfoAttributes">
+      <!-- Pronouns, Bday,  || Groups -->
+      <div id="memberInfoLeft">
+        <h4 class="noMrgn">Pronouns :: <span id="memberInfoPronouns"></span></h4>
+        <h4 class="noMrgn">Birthday :: <span id="memberInfoBday">0004-01-01</span></h4>
+      </div>
+      <div id="memberInfoRight">
+        <h3 class="noMrgn">Groups</h3>
+        <p id="memberInfoGroups"></p>
+      </div>
+    </div>
+
+    <div id="memberInfoBanner">
+
+    </div>
+  </div>
   
 
   <div id="container">
@@ -193,9 +228,10 @@
   </div>
   
   <script type="module" src="Scripts/members.js"></script>
+  <script type="module" src="Scripts/system.js"></script>
   <script type="module" src="Scripts/utils.js"></script>
   <script type="module" src="Scripts/journal.js"></script>
-  <!-- <script src="Scripts/settings.js"></script> -->
+  <script type="module" src="Scripts/settings.js"></script>
   <script type="module" src="Scripts/main.js"></script>
 
 </body>

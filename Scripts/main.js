@@ -1,4 +1,4 @@
-import { toggleSettings, showAddToFrontContainer, hideAddToFrontContainer, showfrontersContainer, hidefrontersContainer, showMemberCreationContainer, hideMemberCreationContainer } from './utils.js';
+import { toggleSettings, showAddToFrontContainer, hideAddToFrontContainer, showfrontersContainer, hidefrontersContainer, showMemberCreationContainer, hideMemberCreationContainer, hideMemberInfo } from './utils.js';
 import { TOKEN } from "./init.js";
 const alertElement = document.getElementById("alert");
 
@@ -57,5 +57,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     hideAddToFrontContainer();
   });
   document.getElementById('cancelCreateMember').addEventListener('click', hideMemberCreationContainer);
+  
+  document.getElementById('returnMember').addEventListener('click', hideMemberInfo);
   
 });

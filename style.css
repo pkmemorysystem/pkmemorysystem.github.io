@@ -316,7 +316,8 @@ button:active, .btn:active {
 #settingsContainer,
 #addToFrontContainer, 
 #frontersContainer, 
-#createMemberContainer {
+#createMemberContainer,
+#memberInfo {
   position: fixed;
   background: rgba(58, 58, 58, 0.507);
   border-radius: 16px;
@@ -360,10 +361,9 @@ button:active, .btn:active {
   top: -200vh;
   /* top: calc(50% - (500px / 2)); debug */
   grid-template-rows: auto 2em 1fr auto;
-
 }
 #frontersContainer {
-  z-index: 8;
+  z-index: 7;
   left: calc(50% - (400px / 2));
   bottom: -200vh;
   /* bottom: calc(50% - (500px / 2)); debug */
@@ -371,14 +371,71 @@ button:active, .btn:active {
 
 }
 #createMemberContainer {
-  z-index: 8;
+  z-index: 9;
   top: calc(50% - (500px / 2));
   left: -200vw;
   /* left: calc(50% - (500px / 2)); debug */
   grid-template-rows: auto 1fr auto;
-
 }
 
+#memberInfo {
+  width: 550px;
+  height: 700px;
+  z-index: 6;
+  left: calc(50% - (550px / 2));
+  /* top: calc(50% - (700px / 2)); */
+  top: -100vh;
+  grid-template-rows: auto 1em 200px 1fr auto;
+}
+#memberInfoDN {
+  font-style: italic;
+}
+#memberInfoContent {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: 200px;
+  gap: 1em;
+}
+#memberInfoImg {
+  height: 100%;
+}
+#memberInfoDesc {
+  height: inherit;
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 8px;
+  font-weight: bolder;
+  border: 1.5px dashed white;
+  border-radius: 10px;
+  overflow: auto;
+}
+.noMrgn {
+  margin: 0.25em;
+}
+#memberInfoAttributes {
+  height: 6em;
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 8px;
+  margin: 0.75em;
+  font-weight: bolder;
+  border: 1.5px dashed white;
+  border-radius: 10px;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+#memberInfoRight {
+  overflow: auto;
+}
+#memberInfoGroups {
+  margin: 0.5em;
+}
+#memberInfoBanner {
+  height: 275px;
+  background-repeat: no-repeat;
+  background-size: cover ;
+}
 
 #cancelAddToFront, #returnFronters, #cancelCreateMember {
   cursor: pointer;
@@ -386,4 +443,17 @@ button:active, .btn:active {
 
 #frontMemberList {
   overflow-y: auto;
+}
+
+/* Do it with javascript */
+#memberInfoName {
+  max-width: 350px;
+  word-wrap: break-word;
+}
+#memberInfoColor {
+  width: 1em;
+  height: 1em;
+  padding: 0.5em;
+  background-color: red;
+  border-radius: 1em;
 }
