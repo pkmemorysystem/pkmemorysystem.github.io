@@ -21,7 +21,6 @@ export async function fetchSystem(apiUrl, systemRef, TOKEN) {
     //   const className = `member-${member.id}`;
     //   member.class = className;
     // });
-    console.log(system);
     return system;
   } catch (error) {
     console.error(error);

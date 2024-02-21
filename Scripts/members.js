@@ -23,7 +23,6 @@ async function fetchMembers(apiUrl, systemRef, TOKEN) {
     //   const className = `member-${member.id}`;
     //   member.class = className;
     // });
-    console.log(members);
     return members;
   } catch (error) {
     console.error(error);
@@ -579,7 +578,6 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
           event.preventDefault();
           const memberId = this.dataset.memberId;
           const newValue = this.innerHTML.replace(/<br>/g, "\n");
-          console.log(newValue);
           updateAttribute(memberId, 'description', newValue);
         }
       });
@@ -632,8 +630,7 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
     }
   } else if (event.target.classList.contains('member-color')) {
     const memberId = event.target.closest('.member').dataset.memberId;
-    let colorNew = prompt("Please select a color:");
-    colorNew = colorNew.replace('#', '');
+    const colorNew = prompt("Please select a color:");
     if (colorNew) {
       updateAttribute(memberId, 'color', colorNew);
     }
