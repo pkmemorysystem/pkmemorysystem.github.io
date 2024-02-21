@@ -58,9 +58,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   });
   document.getElementById('cancelCreateMember').addEventListener('click', hideMemberCreationContainer);
   
-  document.getElementById('returnMember').addEventListener('click', function () {
-    hideMemberInfo();
-    window.location.reload();
-  });
+  document.getElementById('returnMember').addEventListener('click', hideMemberInfo);
   
 });

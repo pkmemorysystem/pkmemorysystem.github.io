@@ -237,6 +237,8 @@ function createMemberDiv(member) {
   xPath.setAttribute("d", "m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z");
 
   const memberName = document.createElement("h3");
+  memberName.classList.add("memberPKName");
+
   // memberName.textContent = localStorage.getItem('preferDisplayNamesChecked') === 'true' ? member.display_name : member.name;
   if (localStorage.getItem('preferDisplayNamesChecked') === 'true' && member.display_name) {
     memberName.textContent = member.display_name;
@@ -475,10 +477,11 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
         document.getElementById("memberInfoImg").src = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
       }
 
-      const memberDescription = member.description.replace(/\n/g, "<br>");
-
-      document.getElementById("memberInfoDesc").innerHTML = memberDescription;
       document.getElementById("memberInfoDesc").setAttribute("data-member-id", memberId);
+      if (member.description) {
+        const memberDescription = member.description.replace(/\n/g, "<br>");    
+        document.getElementById("memberInfoDesc").innerHTML = memberDescription;
+      } 
 
       const memberInfoPronouns = document.getElementById("memberInfoPronouns");
 
@@ -590,12 +593,14 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
 });
 
 
-
 document.getElementById('memberContainer').addEventListener('dblclick', function (event) {
   if (event.target.tagName === 'H3' || event.target.tagName === 'H4') {
     const memberElement = event.target.closest('.member');
     const memberId = memberElement.dataset.memberId;
     const isPronouns = event.target.tagName === 'H4';
+    const preferDisplayNamesChecked = localStorage.getItem('preferDisplayNamesChecked') === 'true';
+    const displayName = memberElement.querySelector('h3').textContent;
+
     event.target.contentEditable = true;
     event.target.focus();
 
@@ -605,7 +610,13 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
         const newValue = event.target.textContent.trim();
         const attribute = isPronouns ? 'pronouns' : 'name';
         if (newValue !== '') {
-          await updateAttribute(memberId, attribute, newValue);
+          if (isPronouns) {
+            await updateAttribute(memberId, attribute, newValue);
+          } else if (preferDisplayNamesChecked && event.target.tagName === 'H3' && newValue !== displayName) {
+            await updateAttribute(memberId, 'display_name', newValue);
+          } else {
+            await updateAttribute(memberId, attribute, newValue);
+          }
         } else {
           if (isPronouns) {
             await updateAttribute(memberId, 'pronouns', '');
@@ -617,13 +628,14 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
     const memberId = event.target.dataset.memberId;
     const imageUrl = prompt("Please enter the URL of the image you want to use as the avatar:");
     if (imageUrl) {
-      updateAttribute(memberId, imageUrl, imageUrl);
+      updateAttribute(memberId, 'avatar_url', imageUrl);
     }
   } else if (event.target.classList.contains('member-color')) {
     const memberId = event.target.closest('.member').dataset.memberId;
-    const colorNew = prompt("Please select a color:");
-    if (color) {
-      updateAttribute(memberId, color, colornew);
+    let colorNew = prompt("Please select a color:");
+    colorNew = colorNew.replace('#', '');
+    if (colorNew) {
+      updateAttribute(memberId, 'color', colorNew);
     }
   }
 });
