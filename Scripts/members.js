@@ -617,7 +617,7 @@ document.getElementById('memberContainer').addEventListener('dblclick', function
     const memberId = event.target.dataset.memberId;
     const imageUrl = prompt("Please enter the URL of the image you want to use as the avatar:");
     if (imageUrl) {
-      updateAttribute(memberId, avatar_url, imageUrl);
+      updateAttribute(memberId, imageUrl, imageUrl);
     }
   } else if (event.target.classList.contains('member-color')) {
     const memberId = event.target.closest('.member').dataset.memberId;
