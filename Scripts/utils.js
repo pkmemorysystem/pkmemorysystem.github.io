@@ -1,9 +1,10 @@
 export function toggleSettings() {
   const settingsContainer = document.getElementById('settingsContainer');
+  const settingsContainerWidth = settingsContainer.offsetWidth;
     const currentRight = parseInt(getComputedStyle(settingsContainer).right);
 
     if (currentRight === 0) {
-      settingsContainer.style.right = '-400px'; // Hide settings
+      settingsContainer.style.right = `-${settingsContainerWidth}px`; // Hide settings
     } else {
       settingsContainer.style.right = '0'; // Show settings
     }
