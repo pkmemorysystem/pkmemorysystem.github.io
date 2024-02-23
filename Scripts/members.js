@@ -2,6 +2,7 @@ import { updateNoPronounPlaceholder } from './settings.js';
 import { systemRef, apiUrl, TOKEN } from "./init.js";
 import { showAlert } from "./main.js";
 import { fetchSystem } from "./system.js";
+import { hideMemberInfo } from "./utils.js";
 
 async function fetchMembers(apiUrl, systemRef, TOKEN) {
   try {
@@ -298,7 +299,6 @@ function createMemberDiv(member) {
   return memberDiv;
 }
 
-
 let checkedMembers = [];
 function createMemberTab(member) {
   // for frontMemberList
@@ -442,6 +442,8 @@ async function fetchMemberGroups(memberId) {
 document.getElementById("memberContainer").addEventListener("contextmenu", async function (event) {
   event.preventDefault();
 
+  hideMemberInfo();
+
   if (event.target.tagName === "IMG") {
     const memberId = event.target.dataset.memberId;
 
@@ -562,6 +564,7 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
       const memberGroups = await fetchMemberGroups(memberId);
 
       const memberGroupsElement = document.getElementById("memberInfoGroups");
+      
       if (memberGroups.length === 0) {
         memberGroupsElement.textContent = "No Groups";
       } else {
