@@ -3,7 +3,7 @@ export function toggleSettings() {
     const currentRight = parseInt(getComputedStyle(settingsContainer).right);
 
     if (currentRight === 0) {
-      settingsContainer.style.right = '-200vw'; // Hide settings
+      settingsContainer.style.right = '-1000vw'; // Hide settings
     } else {
       settingsContainer.style.right = '0'; // Show settings
     }
@@ -18,7 +18,7 @@ export function showAddToFrontContainer() {
 
 export function hideAddToFrontContainer() {
   const addToFrontContainer = document.getElementById('addToFrontContainer');
-  addToFrontContainer.style.top = "-100vh"; // Move the container off-screen to hide it
+  addToFrontContainer.style.top = "-1000vh"; // Move the container off-screen to hide it
 }
 
 
@@ -31,7 +31,7 @@ export function showfrontersContainer() {
 
 export function hidefrontersContainer() {
   const frontersContainer = document.getElementById('frontersContainer');
-  frontersContainer.style.bottom = "-100vh"; // Move the container off-screen to hide it
+  frontersContainer.style.bottom = "-1000vh"; // Move the container off-screen to hide it
 }
 
 
@@ -44,12 +44,12 @@ export function showMemberCreationContainer() {
 
 export function hideMemberCreationContainer() {
   const createMemberContainer = document.getElementById('createMemberContainer');
-  createMemberContainer.style.left = "-100vw"; // Move the container off-screen to hide it
+  createMemberContainer.style.left = "-1000vw"; // Move the container off-screen to hide it
 }
 
 export function hideMemberInfo() {
   const memberInfo = document.getElementById('memberInfo');
-  memberInfo.style.top = "-100vh"
+  memberInfo.style.top = "-1000vh"
 }
 
 

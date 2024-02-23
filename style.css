@@ -350,7 +350,7 @@ button:active, .btn:active {
   /* z-index: 8; */
   width: 400px;
   height: 500px;
-  /* direction: -100%; */
+  /* direction: -100vx; */
   /* cirection: calc(50% - (500px / 2)); debug */
   
   display: grid;
@@ -358,14 +358,14 @@ button:active, .btn:active {
 #addToFrontContainer {
   z-index: 8;
   left: calc(50% - (400px / 2));
-  top: -200vh;
+  top: -1000vh;
   /* top: calc(50% - (500px / 2)); debug */
   grid-template-rows: auto 2em 1fr auto;
 }
 #frontersContainer {
   z-index: 7;
   left: calc(50% - (400px / 2));
-  bottom: -200vh;
+  bottom: -1000vh;
   /* bottom: calc(50% - (500px / 2)); debug */
   grid-template-rows: auto 1fr auto;
 
@@ -373,7 +373,7 @@ button:active, .btn:active {
 #createMemberContainer {
   z-index: 9;
   top: calc(50% - (500px / 2));
-  left: -200vw;
+  left: -1000vw;
   /* left: calc(50% - (500px / 2)); debug */
   grid-template-rows: auto 1fr auto;
 }
@@ -384,7 +384,7 @@ button:active, .btn:active {
   z-index: 6;
   left: calc(50% - (550px / 2));
   /* top: calc(50% - (700px / 2)); */
-  top: -100vh;
+  top: -1000vh;
   grid-template-rows: auto 1em 200px 1fr auto;
 }
 #memberInfoDN {
