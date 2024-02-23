@@ -558,8 +558,8 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
 
 
       document.getElementById("memberInfoBanner").style.backgroundImage = `url('${member.banner}')`;
-
-      document.getElementById("memberInfo").style.top = `calc(50% - (700px / 2))`;
+      const memberInfoHeight = document.getElementById("memberInfo").offsetHeight
+      document.getElementById("memberInfo").style.top = `calc(50% - (${memberInfoHeight}px / 2))`;
 
       const memberGroups = await fetchMemberGroups(memberId);
 

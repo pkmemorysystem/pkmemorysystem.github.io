@@ -3,7 +3,7 @@ export function toggleSettings() {
     const currentRight = parseInt(getComputedStyle(settingsContainer).right);
 
     if (currentRight === 0) {
-      settingsContainer.style.right = '-1000vw'; // Hide settings
+      settingsContainer.style.right = '-400px'; // Hide settings
     } else {
       settingsContainer.style.right = '0'; // Show settings
     }
@@ -18,7 +18,8 @@ export function showAddToFrontContainer() {
 
 export function hideAddToFrontContainer() {
   const addToFrontContainer = document.getElementById('addToFrontContainer');
-  addToFrontContainer.style.top = "-1000vh"; // Move the container off-screen to hide it
+  const containerHeight = addToFrontContainer.offsetHeight;
+  addToFrontContainer.style.top = `-${containerHeight}px`; // Move the container off-screen to hide it
 }
 
 
@@ -31,7 +32,8 @@ export function showfrontersContainer() {
 
 export function hidefrontersContainer() {
   const frontersContainer = document.getElementById('frontersContainer');
-  frontersContainer.style.bottom = "-1000vh"; // Move the container off-screen to hide it
+  const containerHeight = frontersContainer.offsetHeight;
+  frontersContainer.style.bottom = `-${containerHeight}px`; // Move the container off-screen to hide it
 }
 
 
@@ -44,12 +46,14 @@ export function showMemberCreationContainer() {
 
 export function hideMemberCreationContainer() {
   const createMemberContainer = document.getElementById('createMemberContainer');
-  createMemberContainer.style.left = "-1000vw"; // Move the container off-screen to hide it
+  const containerHeight = createMemberContainer.offsetWidth;
+  createMemberContainer.style.left = `-${containerHeight}px`; // Move the container off-screen to hide it
 }
 
 export function hideMemberInfo() {
   const memberInfo = document.getElementById('memberInfo');
-  memberInfo.style.top = "-1000vh"
+  const containerHeight = memberInfo.offsetHeight;
+  memberInfo.style.top = `-${containerHeight}px`;
 }
 
 
