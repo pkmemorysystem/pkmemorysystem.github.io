@@ -453,6 +453,7 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
       if (!member) {
         throw new Error("Member data not found");
       }
+      console.log(member);
 
       const system = await fetchSystem(apiUrl, systemRef, TOKEN);
 
@@ -478,10 +479,15 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
         document.getElementById("memberInfoImg").src = "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg";
       }
 
-      document.getElementById("memberInfoDesc").setAttribute("data-member-id", memberId);
+      let memberInfoDesc = document.getElementById("memberInfoDesc");
+      memberInfoDesc.setAttribute("data-member-id", memberId);
+      const pElement = memberInfoDesc.querySelector("p");
       if (member.description) {
-        const memberDescription = member.description.replace(/\n/g, "<br>");    
-        document.getElementById("memberInfoDesc").innerHTML = memberDescription;
+        const md = window.markdownit({
+          breaks: true
+        });
+        const memberDescription = md.render(member.description);
+        pElement.innerHTML = memberDescription;
       } 
 
       const memberInfoPronouns = document.getElementById("memberInfoPronouns");
@@ -571,21 +577,37 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
         const groupNames = memberGroups.map(group => group.name);
         memberGroupsElement.textContent = groupNames.join(", ");
       }
+      
 
-      document.getElementById("memberInfoDesc").addEventListener("keydown", function (event) {
+      memberInfoDesc.addEventListener("focus", function() {
+        console.log(member.description);
+        pElement.innerHTML = member.description.replace(/\n/g, "<br>");
+      })
+      memberInfoDesc.addEventListener("blur", function() {
+        const md = window.markdownit({
+          breaks: true
+        });
+        pElement.innerHTML = md.render(pElement.innerHTML.replace(/<br>/g, "\n"));
+        console.log("soft update");
+      })
+      memberInfoDesc.addEventListener("keydown", function (event) {
         if (event.key === "Enter" && event.shiftKey) {
           return;
         }
         console.log("Now content :: ", this.innerHTML)
         if (event.key === "Enter") {
           event.preventDefault();
-          const memberId = this.dataset.memberId;
-          const newValue = this.innerHTML.replace(/<br>/g, "\n");
+          const md = window.markdownit({
+            breaks: true
+          });
+          const newValue = pElement.innerHTML
+            .replace(/<br>/g, "\n")
+            .replace(/<\/?[^>]+(>|$)/g, "")
+            .replace(/&nbsp;/g, " ");
           updateAttribute(memberId, 'description', newValue);
         }
       });
-
-
+      
     } catch (error) {
       console.error("Error updating member info:", error);
     }

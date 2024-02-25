@@ -12,6 +12,7 @@ body {
   height: 100vh;
   color: rgb(238, 233, 233);
   /* overflow: hidden; */
+  font-weight: lighter;
 }
 
 .outlined {
@@ -406,7 +407,6 @@ button:active, .btn:active {
   text-align: left;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 2px 8px;
-  font-weight: bolder;
   border: 1.5px dashed white;
   border-radius: 10px;
   overflow: auto;
