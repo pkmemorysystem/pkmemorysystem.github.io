@@ -434,9 +434,9 @@ button:active, .btn:active {
   margin: 0.5em;
 }
 #memberInfoBanner {
-  height: 275px;
+  height: 270px;
   background-repeat: no-repeat;
-  background-size: cover ;
+  background-size: contain ;
 }
 
 #cancelAddToFront, #returnFronters, #cancelCreateMember {

@@ -579,34 +579,38 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
       }
       
 
-      memberInfoDesc.addEventListener("focus", function() {
-        console.log(member.description);
-        pElement.innerHTML = member.description.replace(/\n/g, "<br>");
-      })
-      memberInfoDesc.addEventListener("blur", function() {
-        const md = window.markdownit({
-          breaks: true
-        });
-        pElement.innerHTML = md.render(pElement.innerHTML.replace(/<br>/g, "\n"));
-        console.log("soft update");
-      })
-      memberInfoDesc.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" && event.shiftKey) {
-          return;
-        }
-        console.log("Now content :: ", this.innerHTML)
-        if (event.key === "Enter") {
-          event.preventDefault();
-          const md = window.markdownit({
-            breaks: true
-          });
-          const newValue = pElement.innerHTML
-            .replace(/<br>/g, "\n")
-            .replace(/<\/?[^>]+(>|$)/g, "")
-            .replace(/&nbsp;/g, " ");
-          updateAttribute(memberId, 'description', newValue);
+      const md = window.markdownit({
+        breaks: true
+      });
+
+      memberInfoDesc.addEventListener("focus", async function() {
+        try {
+          const updatedMember = await fetchMember(memberId);
+          
+          if (updatedMember.description) {
+            pElement.innerHTML = updatedMember.description.replace(/\n/g, "<br>");
+          } else {
+            pElement.innerHTML = "";
+          }
+        } catch (error) {
+          console.error("Error fetching member data:", error);
         }
       });
+      
+
+      memberInfoDesc.addEventListener("blur", function() {
+        const newValue = pElement.innerHTML
+          .replace(/<br>/g, "\n")
+          .replace(/<\/?[^>]+(>|$)/g, "")
+          .replace(/&nbsp;/g, " ");
+      
+        pElement.innerHTML = md.render(newValue);
+      
+        updateAttribute(memberId, 'description', newValue);
+      
+      });
+
+      
       
     } catch (error) {
       console.error("Error updating member info:", error);
@@ -614,7 +618,6 @@ document.getElementById("memberContainer").addEventListener("contextmenu", async
   }
 
 });
-
 
 document.getElementById('memberContainer').addEventListener('dblclick', function (event) {
   if (event.target.tagName === 'H3' || event.target.tagName === 'H4') {
