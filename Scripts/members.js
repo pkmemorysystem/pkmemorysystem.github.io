@@ -27,6 +27,9 @@ async function fetchMembers(apiUrl, systemRef, TOKEN) {
     return members;
   } catch (error) {
     console.error(error);
+    setTimeout(function () {
+      window.location.reload();
+    }, 2000);
     return [];
   }
 }
