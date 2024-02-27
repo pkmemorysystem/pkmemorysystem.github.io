@@ -390,6 +390,10 @@ button:active, .btn:active {
   top: -700px;
   grid-template-rows: auto 1em 200px 1fr auto;
 }
+#memberInfoTitle span {
+  display: flex;
+  align-items: center;
+}
 #memberInfoDN {
   font-style: italic;
 }

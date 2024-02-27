@@ -1,4 +1,3 @@
-import { systemRef, apiUrl, TOKEN } from "./init.js";
 import { showAlert } from "./main.js";
 
 export async function fetchSystem(apiUrl, systemRef, TOKEN) {
